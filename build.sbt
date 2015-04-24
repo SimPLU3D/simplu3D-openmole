@@ -42,7 +42,7 @@ val openMOLEVersion = "5.0-SNAPSHOT"
 
 libraryDependencies += "org.openmole" %% "org-openmole-core-dsl" % openMOLEVersion
 
-libraryDependencies += "org.openmole" %% "org-openmole-plugin-task-scala" % openMOLEVersion
+// libraryDependencies += "org.openmole" %% "org-openmole-plugin-task-scala" % openMOLEVersion
 
 val simplu3DVersion = "1.0-SNAPSHOT"
 
