@@ -14,6 +14,10 @@ OsgiKeys.privatePackage := Seq("")
 
 scalariformSettings
 
+resolvers += "IGN Release" at "https://forge-cogit.ign.fr/nexus/content/repositories/releases/"
+
+resolvers += "IGN Snapshots" at "https://forge-cogit.ign.fr/nexus/content/repositories/snapshots/"
+
 resolvers += "IDB" at "http://igetdb.sourceforge.net/maven2-repository/"
 
 resolvers += "ISC-PIF Public" at "http://maven.iscpif.fr/public/"
@@ -22,9 +26,6 @@ resolvers += "ISC-PIF Snapshots" at "http://maven.iscpif.fr/ign-snapshots/"
 
 resolvers += "ISC-PIF Release" at "http://maven.iscpif.fr/ign-releases/"
 
-resolvers += "IGN Release" at "https://forge-cogit.ign.fr/nexus/content/repositories/releases/"
-
-resolvers += "IGN Snapshots" at "https://forge-cogit.ign.fr/nexus/content/repositories/snapshots/"
 
 resolvers += "ImageJ" at "http://maven.imagej.net/content/repositories/public"
 
