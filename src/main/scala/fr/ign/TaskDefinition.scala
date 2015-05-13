@@ -68,7 +68,7 @@ abstract class AbstractTabArchive(nbValX : Integer,  nbYVal : Integer){
 }
 
 
-//Un instanciation basique de AbstractTabArchive avec le nombre de boîtes et le CES
+//Un instanciation basique de AbstractTabArchive avec le nombre de boÃ®tes et le CES
 class DefaultTabArchive( val nbValX : Integer,   val nbYVal : Integer, val valMaxX : Double, val valMaxY : Double) extends AbstractTabArchive (nbValX ,  nbYVal ){
 
   val currentValMaxX = valMaxX;
@@ -113,7 +113,7 @@ class DefaultTabArchive( val nbValX : Integer,   val nbYVal : Integer, val valMa
 
 
 /**
- * On sample : on met à jour le contexte si une nouvelle configuration est proposée
+ * On sample : on met Ã  jour le contexte si une nouvelle configuration est proposÃ©e
  * @param simulConf
  * @param duration
  */
@@ -144,7 +144,7 @@ class Simplu3DTask (val simulConf : Prototype[SimulConfiguration], duration: Dur
 
 
 
-//Mise à jour de la tabarchive si on améliore une des configurations
+//Mise Ã  jour de la tabarchive si on amÃ©liore une des configurations
 class MergeTask ( val simulConf : Prototype[SimulConfiguration], val matrixArchive : Prototype[AbstractTabArchive] ) extends Task {
 
 

@@ -38,7 +38,7 @@ var paramPath = ""
 
 
 
-//On charge l'environnement géographique
+//On charge l'environnement gÃ©ographique
 var load = new LoaderSHP
 var env = load.getEnvironnement(folderData)
 var  p: Parameters = env.loadParameters(paramPath)
@@ -46,34 +46,34 @@ var  p: Parameters = env.loadParameters(paramPath)
 
 
 
-//On récupère une parcelle sur laquelle simuler
+//On rÃ©cupÃ¨re une parcelle sur laquelle simuler
 val bPU = env.getBpU().get(0);
 
-////////////////////////On prépare le prédicat
+////////////////////////On prÃ©pare le prÃ©dicat
 
-//Valeurs de règles à saisir
-//Recul par rapport à la voirie
+//Valeurs de rÃ¨gles Ã  saisir
+//Recul par rapport Ã  la voirie
 val distReculVoirie : Double = 0.0;
 //Recul par rapport au fond de la parcelle
 val distReculFond : Double = 2;
-//Recul par rapport aux bordures latérales
+//Recul par rapport aux bordures latÃ©rales
 val distReculLat : Double = 4;
-//Distance entre 2 boîtes d'une même parcelle
+//Distance entre 2 boÃ®tes d'une mÃªme parcelle
 val distanceInterBati : Double = 5;
-//CES maximal (2 ça ne sert à rien)
+//CES maximal (2 Ã§a ne sert Ã  rien)
 val maximalCES : Double = 2;
 
-//Instanciation du prédicat
+//Instanciation du prÃ©dicat
 val pred : SamplePredicate[Cuboid, GraphConfiguration[Cuboid], BirthDeathModification[Cuboid]] = new  SamplePredicate(bPU, distReculVoirie, distReculFond, distReculLat, distanceInterBati,  maximalCES)
 ////////////////////
 
 var oCB = new OptimisedBuildingsCuboidFinalDirectRejection();
 
 //Instanciation de la configuration initiale
-var initialGraphConfiguration = oCB.create_configuration(p, bPU.generateGeom().buffer(1), bPU ) //Penser à déployer
+var initialGraphConfiguration = oCB.create_configuration(p, bPU.generateGeom().buffer(1), bPU ) //Penser Ã  dÃ©ployer
 
-//Il faut instancier ça
-var sampler = oCB.create_sampler(rand, p, bPU, pred);//Penser à déployer
+//Il faut instancier Ã§a
+var sampler = oCB.create_sampler(rand, p, bPU, pred);//Penser Ã  dÃ©ployer
 
 //Je fais quoi de cette instance de simulconfiguration pour qu'elle initialise les prototype ?
 var simulConf = new SimulConfiguration(initialGraphConfiguration, sampler, 0, rand, new SimpleTemperature(0.0))
