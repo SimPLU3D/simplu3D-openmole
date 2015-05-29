@@ -9,8 +9,10 @@ import fr.ign.mpp.configuration.{BirthDeathModification, GraphConfiguration}
 import fr.ign.rjmcmc.sampler.Sampler
 import fr.ign.simulatedannealing.temperature.Temperature
 import org.apache.commons.math3.random.RandomGenerator
+import org.openmole.core.dsl
 import org.openmole.core.workflow.data._
 import org.openmole.core.workflow.task.Task
+import org.openmole.plugin.task.scala.ScalaTask
 
 import scala.Array._
 import scala.concurrent.duration.Duration
@@ -24,7 +26,7 @@ class SimulConfiguration(configuration : GraphConfiguration[Cuboid], sampler : S
                          t : Temperature   ){
   var currentConfiguration : GraphConfiguration[Cuboid] = configuration
   var currentSampler : Sampler[GraphConfiguration[Cuboid], BirthDeathModification[Cuboid]] = sampler
-  var currentEnergy : Double = currentEnergy
+  var currentEnergy : Double = 0
   var randomGenerator :  RandomGenerator = e
   var currentTemperature : Temperature= t
 }
@@ -119,22 +121,27 @@ class DefaultTabArchive( val nbValX : Integer,   val nbYVal : Integer, val valMa
  */
 class Simplu3DTask (val simulConf : Prototype[SimulConfiguration], duration: Duration) extends Task {
 
-  def compute(simulConf: SimulConfiguration, duration: Duration) = {
+  def compute(simulConf: SimulConfiguration, duration: Duration) : SimulConfiguration={
+
+
+
     simulConf.currentSampler.sample(simulConf.randomGenerator, simulConf.currentConfiguration, simulConf.currentTemperature )
     if(!   simulConf.currentSampler.blockTemperature()){
       simulConf.currentConfiguration = simulConf.currentConfiguration
       simulConf.currentEnergy =  simulConf.currentConfiguration.getEnergy
     }
+
+    return simulConf
   }
 
   override protected def process(context: Context): Context = {
-    val newConfiguration =  compute(context(simulConf), duration)
-    Variable(simulConf,  newConfiguration )
+     val newConf = compute(context(simulConf), duration)
+     Variable(simulConf,newConf)
   }
 
-  override def defaults: DefaultSet = ???
+  override def name: String = "Building sampler"
 
-  override def name: String = "Merge Task"
+  override def defaults: DefaultSet = ???
 
   override def outputs: DataSet = ???
 
@@ -148,7 +155,7 @@ class Simplu3DTask (val simulConf : Prototype[SimulConfiguration], duration: Dur
 class MergeTask ( val simulConf : Prototype[SimulConfiguration], val matrixArchive : Prototype[AbstractTabArchive] ) extends Task {
 
 
-  def merge(simulConf : SimulConfiguration,matrixArchive : AbstractTabArchive ) {
+  def merge(simulConf : SimulConfiguration,matrixArchive : AbstractTabArchive ) : AbstractTabArchive = {
 
     matrixArchive.addValue(simulConf.currentEnergy, simulConf.currentConfiguration)
 
