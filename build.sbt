@@ -21,7 +21,8 @@ scalariformSettings
 
 resolvers += "IDB" at "http://igetdb.sourceforge.net/maven2-repository/"
 
-resolvers += "Local Maven Repository" at "file:///e:/.m2/"
+//resolvers += "Local Maven Repository" at "file://"+Path.userHome.absolutePath+"/.m2/repository"
+resolvers += Resolver.mavenLocal
 
 resolvers += "IGN snap" at "https://forge-cogit.ign.fr/nexus/content/repositories/snapshots"
 
