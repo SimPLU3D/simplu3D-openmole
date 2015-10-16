@@ -24,7 +24,8 @@ resolvers += "IDB" at "http://igetdb.sourceforge.net/maven2-repository/"
 //resolvers += "Local Maven Repository" at "file://"+Path.userHome.absolutePath+"/.m2/repository"
 resolvers += Resolver.mavenLocal
 
-resolvers += "IGN snap" at "https://forge-cogit.ign.fr/nexus/content/repositories/snapshots"
+resolvers += "IGN snapshots" at "https://forge-cogit.ign.fr/nexus/content/repositories/snapshots"
+resolvers += "IGN releases" at "https://forge-cogit.ign.fr/nexus/content/repositories/releases"
 
 //resolvers += "ISC-PIF Public" at "http://maven.iscpif.fr/public/"
 
@@ -52,4 +53,15 @@ resolvers += "Hibernate" at "http://www.hibernatespatial.org/repository"
 
 val simplu3DVersion = "1.0-SNAPSHOT"
 
-libraryDependencies += "fr.ign.cogit" % "simplu3d" % simplu3DVersion
+libraryDependencies += "fr.ign.cogit" % "simplu3d" % simplu3DVersion excludeAll(
+    ExclusionRule(organization = "uk.ac.ed.ph.snuggletex"),
+    ExclusionRule(organization = "vigna.dsi.unimi.it"),
+    ExclusionRule(organization = "net.billylieurance.azuresearch"),
+    ExclusionRule(organization = "net.sf.jafama"),
+    ExclusionRule(organization = "net.sourceforge.jmatio"),
+    ExclusionRule(organization = "jgrapht"),
+    ExclusionRule(organization = "org.bethecoder"),
+    ExclusionRule(organization = "com.aetrion.flickr"),
+    ExclusionRule(organization = "com.caffeineowl.graphics"),
+    ExclusionRule(organization = "de.bwaldvogel")
+  )
