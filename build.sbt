@@ -22,9 +22,11 @@ scalariformSettings
 resolvers += "IDB" at "http://igetdb.sourceforge.net/maven2-repository/"
 
 //resolvers += "Local Maven Repository" at "file://"+Path.userHome.absolutePath+"/.m2/repository"
+
 resolvers += Resolver.mavenLocal
 
 resolvers += "IGN snapshots" at "https://forge-cogit.ign.fr/nexus/content/repositories/snapshots"
+
 resolvers += "IGN releases" at "https://forge-cogit.ign.fr/nexus/content/repositories/releases"
 
 //resolvers += "ISC-PIF Public" at "http://maven.iscpif.fr/public/"
