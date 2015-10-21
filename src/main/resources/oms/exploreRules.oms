@@ -1,6 +1,6 @@
-// "E:/mbrasebin/Donnees/Strasbourg/GTRU/ProjectT3/";
-// "E:/temp2/";
-// "E:/mbrasebin/GeOxygene/simplu3d/simplu3D/src/main/resources/scenario/building_parameters_project_expthese_temp.xml";
+val inputFolder = Val[File]
+val outputFolder = Val[File]
+
 val idBPU = 255
 val distReculVoirie = Val[Double]
 val distReculFond = Val[Double]
@@ -9,7 +9,7 @@ val maximalCES = Val[Double]
 val hIniRoad = Val[Double]
 val slopeRoad = Val[Double]
 val hauteurMax = Val[Double]
-val run = Val[Int]
+val seed = Val[Long]
 
 val rangeReculVoirie = (0.0 to 0.5 by 0.5) // (0.0 to 5.0 by 0.5)
 val rangeReculFond = (0.0 to 0.5 by 0.5) // (0.0 to 5.0 by 0.5)
@@ -20,44 +20,39 @@ val rangeSlope = (2.5 to 3.0 by 0.5) // (0.0 to 3.0 by 0.5)
 val rangeHMax = (19.0 to 20.0 by 1.0) // (10.0 to 20.0 by 1.0)
 
 val explo = ExplorationTask(
- (distReculVoirie in rangeReculVoirie) x
+  (distReculVoirie in rangeReculVoirie) x
   (distReculFond in rangeReculFond) x
   (distReculLat in rangeReculLat) x
   (maximalCES in rangeMaxCES) x
   (hIniRoad in rangeHIniRoad) x
   (slopeRoad in rangeSlope) x
   (hauteurMax in rangeHMax) x
-  (seed in UniformDistribution[Long](42) take 100)
-  )
-
-// Function signature : 
-//  run(String folder, String folderOut, String parameterFile, int idBPU, double distReculVoirie,
-// 			double distReculFond, double distReculLat, double maximalCES, double hIniRoad, double slopeRoad,
-// 			double hauteurMax, int run) 
-val javaTask = ScalaTask("RunTask.run(" 
-+ """"E:/mbrasebin/Donnees/Strasbourg/GTRU/ProjectT3/""""
-+","
-+""""E:/temp2/""""
-+","
-+ """"E:/mbrasebin/GeOxygene/simplu3d/simplu3D/src/main/resources/scenario/building_parameters_project_expthese_temp.xml""""
-+ ", idBPU,distReculVoirie, distReculFond, distReculLat, maximalCES, hIniRoad, slopeRoad, hauteurMax, run )") set (
-//  libraries += workDirectory /"simplu3d-openmole-plugin_2.11-1.0.jar",
-  imports += "fr.ign.cogit.simplu3d.openmole._",
-  inputs += ( idBPU,distReculVoirie, distReculFond, distReculLat, maximalCES, hIniRoad, slopeRoad, hauteurMax, run )
+  (seed in UniformDistribution[Long](42) take 10)
 )
 
-val seedExploration = ExplorationTask((seed in UniformDistribution[Long](42) take 100))
+val seedExploration = ExplorationTask((seed in UniformDistribution[Long](42) take 10))
 
 val model =
   ScalaTask("""
-    |
-    |""".stripMar gin) set (
+    |new File(\"/tmp/data_out\").mkdir()
+    |val res = RunTask.run(inputFolder, new File(\"/tmp/data_out\"), paramFile, idBPU, distReculVoirie, distReculFond, distReculLat, maximalCES, hIniRoad, slopeRoad, hauteurMax, seed)
+    |val energy = res.energy
+    |val coverageRatio = res.coverageRatio
+    |val signature = res.signature
+    |""".stripMargin) set (
+    imports += "java.io.File",
     imports += "fr.ign.cogit.simplu3d.openmole._",
-    inputs += seed
-    outputs +=
+    inputs += (inputFolder, paramFile, idBPU, distReculVoirie, distReculFond, distReculLat, maximalCES, hIniRoad, slopeRoad, hauteurMax, seed),
+    outputs += (energy, coverageRatio, signature),
+
+    inputFiles += (input, "/tmp/data_in"),
+    outputFiles += ("/tmp/data_out", outputFolder),
+
+    inputFolder := workDirectory / "data",
+    paramFile := workDirectory / "building_parameters_project_expthese_temp.xml"
   )
 
-val copyHook = CopyFileHook(shape, outputDir + "shape_${temperature}_${temperatureDecrease}_${seed}/")
-val csvHook = AppendToCSVFileHook(outputDir + "energy.csv", temperature, temperatureDecrease, seed, energy)
+val copyHook = CopyFileHook(outputFolder, workDirectory / "results/shape_${seed}_${energy}_${coverageRatio}_${signature}/")
+val csvHook = AppendToCSVFileHook(workDirectory / "results/energy.csv", seed, energy, coverageRatio, signature)
 
-seedExploration -< (Strain(model) on env hook csvHook hook copyHook)
+explo -< (Strain(model) hook csvHook hook copyHook)
