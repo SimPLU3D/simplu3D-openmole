@@ -42,9 +42,10 @@ val seedExploration = ExplorationTask((seed in UniformDistribution[Long](42) tak
 val model =
   ScalaTask("""
     |val (energy, coverageRatio, signature, outputFoler) =
-    |   Simplu3DTask(inputFolder, paramFile, idBPU, distReculVoirie, distReculFond, distReculLat, maximalCES, hIniRoad, slopeRoad, hauteurMax, seed)
+    |   simplu3dopenmoleplugin.Simplu3DTask(inputFolder, paramFile, idBPU, distReculVoirie, distReculFond, distReculLat, maximalCES, hIniRoad, slopeRoad, hauteurMax, seed)
     |""".stripMargin) set (
-    imports += "simplu3dopenmoleplugin._",
+    //om.name := "simplu3dTask"
+    plugins += pluginsOf(Simplu3DTask),
     inputs += (inputFolder, paramFile, idBPU, distReculVoirie, distReculFond, distReculLat, maximalCES, hIniRoad, slopeRoad, hauteurMax, seed),
     outputs += (outputFolder, energy, coverageRatio, signature),
     //inputFiles += (inputFolder, "/tmp/data_in"),
@@ -53,7 +54,6 @@ val model =
     idBPU := 255,
     inputFolder := workDirectory / "data",
     paramFile := workDirectory / "building_parameters_project_expthese_temp.xml"
-    plugins += pluginsOf(Simplu3DTask)
   )
 
 val copyHook = CopyFileHook(outputFolder, workDirectory / "results/shape_${seed}_${energy}_${coverageRatio}_${signature}/")
