@@ -41,13 +41,13 @@ val seedExploration = ExplorationTask((seed in UniformDistribution[Long](42) tak
 
 val model =
   ScalaTask("""
-    |val (energy, coverageRatio, signature, outputFoler) =
+    |val (energy, coverageRatio, signature, outputFolder) =
     |   simplu3dopenmoleplugin.Simplu3DTask(inputFolder, paramFile, idBPU, distReculVoirie, distReculFond, distReculLat, maximalCES, hIniRoad, slopeRoad, hauteurMax, seed)
     |""".stripMargin) set (
     //om.name := "simplu3dTask"
     plugins += pluginsOf(Simplu3DTask),
     inputs += (inputFolder, paramFile, idBPU, distReculVoirie, distReculFond, distReculLat, maximalCES, hIniRoad, slopeRoad, hauteurMax, seed),
-    outputs += (outputFolder, energy, coverageRatio, signature),
+    outputs += (energy, coverageRatio, signature, outputFolder),
     //inputFiles += (inputFolder, "/tmp/data_in"),
     //inputFiles += (paramFile, "/tmp/paramFile.xml"),
     //outputFiles += ("/tmp/data_out", outputFolder),
@@ -60,4 +60,6 @@ val copyHook = CopyFileHook(outputFolder, workDirectory / "results/shape_${seed}
 
 val csvHook = AppendToCSVFileHook(workDirectory / "results/energy.csv", seed, energy, coverageRatio, signature)
 
-explo -< (Strain(model) hook csvHook hook copyHook)
+val env = EGIEnvironment("vo.complex-systems.eu")
+
+explo -< (Strain(model) on env hook csvHook hook copyHook)
