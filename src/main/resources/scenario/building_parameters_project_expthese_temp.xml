@@ -104,6 +104,8 @@
         
         <!-- Dossier des sorties des visiteur -->
         <param key="result" value="E:/temp2/" />           
+
+	<param key="tileSize" value="5" />
 </parameters>
 
 
