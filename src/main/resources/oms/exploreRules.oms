@@ -42,7 +42,7 @@ val seedExploration = ExplorationTask((seed in UniformDistribution[Long](42) tak
 val model =
   ScalaTask("""
     |val (energy, coverageRatio, signature, outputFolder) =
-    |   simplu3dopenmoleplugin.Simplu3DTask(inputFolder, paramFile, idBPU, distReculVoirie, distReculFond, distReculLat, maximalCES, hIniRoad, slopeRoad, hauteurMax, seed)
+    |   simplu3dopenmoleplugin.Simplu3DTask(inputFolder, new Dir(), paramFile, idBPU, distReculVoirie, distReculFond, distReculLat, maximalCES, hIniRoad, slopeRoad, hauteurMax, seed)
     |""".stripMargin) set (
     //om.name := "simplu3dTask"
     plugins += pluginsOf(Simplu3DTask),
