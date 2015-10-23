@@ -60,5 +60,9 @@ libraryDependencies += "fr.ign.cogit" % "simplu3d" % simplu3DVersion excludeAll(
     ExclusionRule(organization = "org.bethecoder"),
     ExclusionRule(organization = "com.aetrion.flickr"),
     ExclusionRule(organization = "com.caffeineowl.graphics"),
-    ExclusionRule(organization = "de.bwaldvogel")
+    ExclusionRule(organization = "de.bwaldvogel"),
+    ExclusionRule(organization = "mnstarfire"),
+    ExclusionRule(organization = "com.thoughtworks.xstream"),
+    ExclusionRule(organization = "jfree"),
+    ExclusionRule(organization = "javax.media")
   )
