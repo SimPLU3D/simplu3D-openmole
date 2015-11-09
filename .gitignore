@@ -1,2 +1,7 @@
 .idea
-/target
+**/target
+project/*~
+bin/
+.project
+.history
+.classpath
