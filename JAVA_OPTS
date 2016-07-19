@@ -1,0 +1,2 @@
+export JAVA_OPTS="$JAVA_OPTS -Djavax.net.ssl.trustStore=/home/mickael/data/certificats/trust_imran2.jks -Djavax.net.ssl.keyStorePassword=leschiensaboient -Dhttp.proxyHost=192.168.4.22 -Dhttp.proxyPort=3128"
+

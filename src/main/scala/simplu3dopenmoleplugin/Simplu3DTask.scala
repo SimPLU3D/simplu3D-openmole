@@ -1,7 +1,7 @@
 package simplu3dopenmoleplugin
 
 import java.io.File
-import fr.ign.cogit.simplu3d.openmole._
+import fr.ign.cogit.simplu3d.experiments.openmole._
 
 object Simplu3DTask {
   def apply(inputFolder: File, outputFolder: File, paramFile: File,

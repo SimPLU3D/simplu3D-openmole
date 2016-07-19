@@ -1,0 +1,37 @@
+import simplu3dopenmoleplugin._
+import java.io.File
+
+//Script to distribute folder simulation
+
+val intputFolder = Val[File]
+val paramFile = Val[File]
+val outputFolder = Val[File]
+val bool = Val[Boolean]
+
+
+
+val explo = ExplorationTask (intputFolder in (workDirectory / "data/").files)
+
+
+val seed = Val[Long]
+
+val model =
+  ScalaTask("""
+     val  (bool, outputFolder)  = simplu3dopenmoleplugin.DistribTask(intputFolder, newDir(), paramFile,seed)
+    |""") set (
+    imports += "simplu3dopenmoleplugin._",
+    plugins += pluginsOf(simplu3dopenmoleplugin.DistribTask),
+    inputs += (intputFolder, paramFile, seed),
+    outputs += (bool, outputFolder),
+    outputFolder := workDirectory / "/",
+    paramFile := workDirectory/"parameters_iauidf.xml",    
+    seed := 42
+  )
+
+
+val copyHook = CopyFileHook(outputFolder, workDirectory / "results/")
+
+val env = LocalEnvironment(6)
+
+explo -< (Strain(model) on env hook copyHook)
+

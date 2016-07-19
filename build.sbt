@@ -2,7 +2,7 @@ name := "simplu3D-openmole-plugin"
 
 version := "1.0"
 
-scalaVersion := "2.11.7"
+scalaVersion := "2.11.6"
 
 osgiSettings
 
@@ -20,19 +20,18 @@ resolvers += "IDB" at "http://igetdb.sourceforge.net/maven2-repository/"
 
 resolvers += Resolver.mavenLocal
 
-resolvers += "IGN snapshots" at "https://forge-cogit.ign.fr/nexus/content/repositories/snapshots"
+resolvers += "IGN snapshots" at "https://forge-cogit.ign.fr/nexus/content/repositories/snapshots/"
 
-resolvers += "IGN releases" at "https://forge-cogit.ign.fr/nexus/content/repositories/releases"
+resolvers += "IGN releases" at "https://forge-cogit.ign.fr/nexus/content/repositories/releases/"
 
-//resolvers += "ISC-PIF Public" at "http://maven.iscpif.fr/public/"
+resolvers += "ISC-PIF Public" at "http://maven.iscpif.fr/public/"
 
-//resolvers += "ISC-PIF Snapshots" at "http://maven.iscpif.fr/ign-snapshots/"
+resolvers += "ISC-PIF Snapshots" at "http://maven.iscpif.fr/ign-snapshots/"
 
-//resolvers += "ISC-PIF Release" at "http://maven.iscpif.fr/ign-releases/"
+resolvers += "ISC-PIF Release" at "http://maven.iscpif.fr/ign-releases/"
 
 resolvers += "ImageJ" at "http://maven.imagej.net/content/repositories/public"
 
-//resolvers += "Central" at "http://repo1.maven.org/maven2/"
 
 resolvers += "Boundless" at "http://repo.boundlessgeo.com/main"
 
@@ -64,5 +63,6 @@ libraryDependencies += "fr.ign.cogit" % "simplu3d" % simplu3DVersion excludeAll(
     ExclusionRule(organization = "mnstarfire"),
     ExclusionRule(organization = "com.thoughtworks.xstream"),
     ExclusionRule(organization = "jfree"),
-    ExclusionRule(organization = "javax.media")
+    ExclusionRule(organization = "javax.media"),
+    ExclusionRule(organization = "org.slf4j")
   )
