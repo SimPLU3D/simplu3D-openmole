@@ -24,11 +24,11 @@ resolvers += "IGN snapshots" at "https://forge-cogit.ign.fr/nexus/content/reposi
 
 resolvers += "IGN releases" at "https://forge-cogit.ign.fr/nexus/content/repositories/releases/"
 
-resolvers += "ISC-PIF Public" at "http://maven.iscpif.fr/public/"
+//resolvers += "ISC-PIF Public" at "http://maven.iscpif.fr/public/"
 
-resolvers += "ISC-PIF Snapshots" at "http://maven.iscpif.fr/ign-snapshots/"
+//resolvers += "ISC-PIF Snapshots" at "http://maven.iscpif.fr/ign-snapshots/"
 
-resolvers += "ISC-PIF Release" at "http://maven.iscpif.fr/ign-releases/"
+//resolvers += "ISC-PIF Release" at "http://maven.iscpif.fr/ign-releases/"
 
 resolvers += "ImageJ" at "http://maven.imagej.net/content/repositories/public"
 
@@ -47,7 +47,7 @@ resolvers += "Hibernate" at "http://www.hibernatespatial.org/repository"
 
 //libraryDependencies += "org.openmole" %% "org-openmole-plugin-task-scala" % openMOLEVersion
 
-val simplu3DVersion = "1.0-SNAPSHOT"
+val simplu3DVersion = "1.1-SNAPSHOT"
 
 libraryDependencies += "fr.ign.cogit" % "simplu3d" % simplu3DVersion excludeAll(
     ExclusionRule(organization = "uk.ac.ed.ph.snuggletex"),

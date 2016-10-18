@@ -12,3 +12,13 @@ object Simplu3DTask {
     (res.energy, res.coverageRatio, res.signature, outputFolder)
   }
 }
+
+object Simplu3DTask2 {
+  def apply(inputFolder: File, outputFolder: File, paramFile: File,
+    distReculVoirie: Double, distReculFond: Double,
+    distReculLat: Double, maximalCES: Double, hIniRoad: Double,
+    slopeRoad: Double, hauteurMax: Double, seed: Long): (Double, Double, Long, File) = {
+    val res = RunTask.run2(inputFolder, outputFolder, paramFile, distReculVoirie, distReculFond, distReculLat, maximalCES, hIniRoad, slopeRoad, hauteurMax, seed)
+    (res.energy, res.coverageRatio, res.signature, outputFolder)
+  }
+}
