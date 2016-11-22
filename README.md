@@ -19,7 +19,7 @@ In other words, PSE make a **clever sampling of the pattern space of a simulatio
 ##Application to SimPLU
 
 SimPLU aims at simulating buildings morphologies w.r.t. formalized urbanistic rules of construction.
-Some of these rules are *parametric* e.g. "within 2 meters from the road, your house shall not be built" . 
+Some of these rules are *parametric* e.g. "you shall not build your house within 2 meters of the road" . 
 
 These parameters have a direct influence on the shape of compatible buildings affecting their volumes, heights etc. and are defined at the scale of a *parcel*.
 
@@ -32,16 +32,35 @@ The idea of a PSE framework applied on SimPLU is to explore the diversity of bui
 The project is described and available [here](../simplu3D)
 
 For the sake of this particular exploration case, we will abstract it as the following figure :
-(./readme_images/simplu_model.svg)
+![image model](./readme_images/simplu_model.svg)
 
+The inputs under study are the parameters of the rules constituting urban regulation document (Plan Local d'Urbanisme a.k.a. PLU)
+The other inputs (the set of rules at play, the zone where the simulation is performed,etc.) are kept constant.
+
+
+The outputs under study are global measures (i.e. at the scale of the zone) of the morphologies of buildings and there disposition on the zone. 
+Other outputs are dimensions and coordinates of the cubes constituting the buildings in the simulated the zone. We use them later for visualization of some of the configurations discovered by PSE.
 
 
 ## Input space
 
+The input space is constituted of 7 parameters:
+
++ distReculVoirie 
++ distReculFond
++ distReculLat
++ maximalCES
++ hIniRoad
++ slopeRoad
++ hauteurMax
+
+
+An other implicit input is the seed used for the random number generator of SimPLU
 
 
 ## Output space 
 
+Various measures are available to qualify the output of a simulation run. 
 
 
 
