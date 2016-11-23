@@ -40,7 +40,6 @@ The idea of a PSE framework applied on SimPLU is to explore the diversity of bui
 The project is described and available [here](../simplu3D)
 
 For the sake of this particular exploration case, we will abstract SimPLU as a machine that transforms inputs parameters into outputs measure.
-![image model](./readme_images/simplu_model.svg)
 
 The inputs under study are the parameters of the rules constituting urban regulation document (Plan Local d'Urbanisme a.k.a. PLU)
 The other inputs (the set of rules at play, the zone where the simulation is performed,etc.) are kept constant.
@@ -63,7 +62,7 @@ The input space is constituted of 7 parameters:
 + hauteurMax : the maximal height of the building
 
 
-![imputparameters](./readme_images/schema_param_input.svg)
+![imputparameters](./readme_images/schema_param_input.png)
 
 
 
