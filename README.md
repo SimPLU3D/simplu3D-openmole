@@ -1,5 +1,13 @@
 # Pattern Search Exploration method on SimPLU Model
 
+## Content of this branch 
+
++ This readme file that gives an introduction on PSE exploration applied to SimPLU 
++ R scripts to analyze results of PSE method
++ instructions to batch-generate shapefiles corresponding to some results' configurations  
++ some results 
+
+
 
 
 ## PSE Method 
@@ -31,7 +39,7 @@ The idea of a PSE framework applied on SimPLU is to explore the diversity of bui
 
 The project is described and available [here](../simplu3D)
 
-For the sake of this particular exploration case, we will abstract it as the following figure :
+For the sake of this particular exploration case, we will abstract SimPLU as a machine that transforms inputs parameters into outputs measure.
 ![image model](./readme_images/simplu_model.svg)
 
 The inputs under study are the parameters of the rules constituting urban regulation document (Plan Local d'Urbanisme a.k.a. PLU)
@@ -46,21 +54,35 @@ Other outputs are dimensions and coordinates of the cubes constituting the build
 
 The input space is constituted of 7 parameters:
 
-+ distReculVoirie 
-+ distReculFond
-+ distReculLat
-+ maximalCES
-+ hIniRoad
-+ slopeRoad
-+ hauteurMax
++ distReculVoirie: the distance between buildings of a parcel and the road (street)
++ distReculFond: the distance between buildings of a parcel and the bottom of the parcel
++ distReculLat: the distance between buildings of a parcel and the sides of the parcel   
++ maximalCES: the maximal surface ratio  between buildings surface and parcel surface  
++ hIniRoad : the height of the wall facing the road (see figure below)
++ slopeRoad &#2248 the angle of the line between the top of the roof and the plane at hIniRoad (see figure below)
++ hauteurMax : the maximal height of the building
 
 
-An other implicit input is the seed used for the random number generator of SimPLU
+![imputparameters](./readme_images/schema_param_input.svg)
+
+
+
+An other implicit input is the seed used for the random number generator of SimPLU.
 
 
 ## Output space 
 
-Various measures are available to qualify the output of a simulation run. 
+
+### Desired properties of measures
+
+Various measures are available to qualify the output of a simulation run; PSE method accepts any kind of measures (discrete continuous). The ideal measures for PSE should be : 
+
++ discriminative regarding the possible output patterns (we are looking for variety)
++ as independent as possible of each other 
++ easily interpretable 
++ sound regarding the thematic domain (here, a mix between urbanism and soil occupation)
+ 
 
 
+### Current available measures
 
