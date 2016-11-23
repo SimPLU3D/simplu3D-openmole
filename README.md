@@ -58,7 +58,7 @@ The input space is constituted of 7 parameters:
 + distReculLat: the distance between buildings of a parcel and the sides of the parcel   
 + maximalCES: the maximal surface ratio  between buildings surface and parcel surface  
 + hIniRoad : the height of the wall facing the road (see figure below)
-+ slopeRoad &#2248 the angle of the line between the top of the roof and the plane at hIniRoad (see figure below)
++ slopeRoad &#2248; the angle of the line between the top of the roof and the plane at hIniRoad (see figure below)
 + hauteurMax : the maximal height of the building
 
 
