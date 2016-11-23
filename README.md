@@ -13,7 +13,7 @@
 ## PSE Method 
 Pattern Search Exploration (PSE) is an open-ended evolutionary method of the OpenMOLE frameWork, designed to explore the diversity of simulation models outputs. See the article [here](http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0138212)
 
-Whereas optimization techniques focus on discovering (near)optimal solutions from a set of feasible solutions, PSE aims at exhibiting the diversity of patterns a model can produce, by cleverly selecting the parameters that produce patterns that are the most different one to each other as possible.
+Whereas optimization techniques focus on discovering (near)optimal solutions from a set of feasible solutions, PSE aims at exhibiting the diversity of patterns a model can produce, by cleverly selecting the parameters that produce patterns that are as different one to each other as possible.
 The massive amounts of simulation runs that PSE requires is made possible by framing the model into the OpenMOLE platform. (See the master branch of this repository)
 
 
@@ -58,7 +58,7 @@ The input space is constituted of 7 parameters:
 + distReculLat: the distance between buildings of a parcel and the sides of the parcel   
 + maximalCES: the maximal surface ratio  between buildings surface and parcel surface  
 + hIniRoad : the height of the wall facing the road (see figure below)
-+ slopeRoad &#2248; the angle of the line between the top of the roof and the plane at hIniRoad (see figure below)
++ slopeRoad : the angle of the line between the top of the roof and the plane at hIniRoad (see figure below)
 + hauteurMax : the maximal height of the building
 
 
@@ -85,3 +85,25 @@ Various measures are available to qualify the output of a simulation run; PSE me
 
 ### Current available measures
 
+
++ Gini index ; inequality in buildings' volume distribution
++ Moran's I :  spatial autocorrelation of volume among parcels of the zone
++ number of box : number of boxes constituting buildings , a rough proxy towards configuration visual complexity
++ coverage ratio : built surface ratio  (built surface / total surface)
++ floor density : like traditional density but taking surface of additional floors of buildings into account
++ profile Moran's I : *ad hoc* measure based on repartition of heights of buildings along the road that delineates the zone. 
++ energy: a quantity homogeneous to volume of the building
+
+
+Moran's I has variants depending on the interaction term between two parcels : current version features euclidean distance between parcel centroids, but one could also imagine alternatives where the distance is taken from building centroids to centroid of the zone, or distance as a number of adjacent neighbors. 
+
+### Other measures (to be included later)(maybe)(we'll see)
+
++ entropy 
++ porosity (seems hard to implement correctly though) from [Luc Adolphe's work](http://epb.sagepub.com/content/28/2/183.short) 
++ rugosity (Ibid.)
+
+
+##What it looks like
+
+![screenshot](./readme_images/screenshot.png)
