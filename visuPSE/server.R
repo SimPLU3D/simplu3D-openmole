@@ -137,7 +137,7 @@ shinyServer(function(input, output) {
     # )
   
     plot_ly(subsetdf, y = ~gini, x = ~moran, z = ~densite, 
-            color= ~coverageRatio, colorscale="Viridis",
+            color= ~coverageRatio, 
                 mode="markers", 
             type="scatter3d",
             hoverinfo="text",
