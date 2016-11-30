@@ -17,11 +17,11 @@ object Simplu3DTask {
   def apply(inputFolder: File, outputFolder: File, paramFile: File,
     distReculVoirie: Double, distReculFond: Double,
     distReculLat: Double, maximalCES: Double, hIniRoad: Double,
-    slopeRoad: Double, hauteurMax: Double, seed: Long): (Double, Double, Double, Double, Double, Double, Double, Double, File) = {
+    slopeRoad: Double, hauteurMax: Double, seed: Long): (Double, Double, Double, Double, Double, Double, Double, Double, Double, File) = {
     val res = RunTask.run2(inputFolder, outputFolder, paramFile,
       distReculVoirie, distReculFond,
       distReculLat, maximalCES, hIniRoad,
       slopeRoad, hauteurMax, seed)
-    (res.energyTot, res.coverageRatio, res.gini, res.moran, res.entropy, res.boxCount, res.maxHeight, res.densite, outputFolder)
+    (res.energyTot, res.coverageRatio, res.gini, res.moran, res.entropy, res.boxCount, res.maxHeight, res.densite, res.profileMoran, outputFolder)
   }
 }
