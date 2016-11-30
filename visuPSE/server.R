@@ -10,12 +10,11 @@
 library(shiny)
 library(plotly)
 library(dplyr)
-library(png)
 
 
 options(scipen = 999)
 
-setwd("/home/pchapron/dev/applishiny/simpluPSE/")
+setwd("/home/pchapron/dev/simplu3D-openmole/visuPSE/")
 df <- read.csv("population400000.csv",header = T)  
 names(df) <-c("generationEvol",names(df)[2:12],"samplesEvol")
 df<- df[,2:12]
@@ -138,16 +137,17 @@ shinyServer(function(input, output) {
     # )
   
     plot_ly(subsetdf, y = ~gini, x = ~moran, z = ~densite, 
-            mode="markers", 
+            color= ~coverageRatio, colorscale="Viridis",
+                mode="markers", 
             type="scatter3d",
             hoverinfo="text",
             text = ~paste("", 'moran: ', round(moran, digits = 3), 
                           '</br> gini: ', round(gini, digits = 3),
                           '</br> densité: ', round(densite, digits  =3) ,
                           '</br> Coverage', round(coverageRatio, digits = 3)),
-             showlegend=F,
+             showlegend=T,
             marker = list(size = 2, 
-                          opacity=0.5, color= ~coverageRatio, colorscale="Viridis",
+                          opacity=0.5, 
                           line = list(width = 0.1, color="gray25"))
      
     ,width = 500, height = 400)
