@@ -107,3 +107,67 @@ Moran's I has variants depending on the interaction term between two parcels : c
 ##What it looks like
 
 ![screenshot](./readme_images/screenshot.png)
+
+##Other useful stuff 
+### data Format / meta data
+
+####Energy file 
+The energy file is a `.csv` file produced by one execution of Simplu.
+It contains several columns : inputparameters first , measures next
+All are made of type double values if not precised otherwise
+
+
+
+Input parameters
++ distReculVoirie
++ distReculFond 
++ distReculLat 
++ maximalCES 
++ hIniRoad 
++ slopeRoad 
++ hauteurMax 
++ seed (long) to initialize the RNG of simplu
+ 
+
+Ouputs 
+ + energy
+ + coverageRatio
+ + gini
+ + moran 
+ + entropy (currently NaN)
+ + boxCount
+ + maxHeight
+ + densite
+ + moranProfile
+
+#### PSE results file 
+Usually named populatioXXXXX.csv with XXXX the number of the PSE method iterations.
+
+The format differ little from the Simplu results files.
+
+First column `evolution$generation` is useless for analysis purpose, as it just contains the current iteration number of the method.
+
+Each line of the PSE results file contains some input parameters and output measures. 
+Output measures are in fact the median values of several (e.g.100) replication of model (simPLU) executions.  
+Last column `evolution$sample` contains the number of executions that has been performed to produce the output measures (median) values. 
+
+
+Input parameters
++ distReculVoirie
++ distReculFond 
++ distReculLat 
++ maximalCES 
++ hIniRoad 
++ slopeRoad 
++ hauteurMax 
++ seed (long) to initialize the RNG of simplu
+ 
+Output measures (3-4 in general)
+e.g. 
+ + energy
+ + coverageRatio
+ + gini
+ + moran 
+
+
+

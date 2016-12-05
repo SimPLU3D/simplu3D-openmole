@@ -23,15 +23,18 @@ df<- df[,2:12]
 
 
 
-#il faut les path en dur ?
-pathimg <- normalizePath("img/spaceinvaders.png")
-pathimg2 <- normalizePath("img/spaceinvaders2.png")
-pathimg3 <- normalizePath("img/spaceinvaders3.png")
-pathimg4 <- normalizePath("img/spaceinvaders4.png")
+# #il faut les path en dur ?
+# pathimg <- normalizePath("img/spaceinvaders.png")
+# pathimg2 <- normalizePath("img/spaceinvaders2.png")
+# pathimg3 <- normalizePath("img/spaceinvaders3.png")
+# pathimg4 <- normalizePath("img/spaceinvaders4.png")
+# 
+# 
+# listpath <- rep_len(c(pathimg,pathimg2,pathimg3,pathimg4), length.out = nrow(df))
+# df$pathimg <- listpath
 
 
-listpath <- rep_len(c(pathimg,pathimg2,pathimg3,pathimg4), length.out = nrow(df))
-df$pathimg <- listpath
+
 
 minis <- apply(df[,1:7],MARGIN = 2,min)
 maxis <- apply(df[,1:7],MARGIN = 2,max)
@@ -39,7 +42,9 @@ noms <- names(df)[1:7]
 bornes <- data.frame(noms, minis, maxis)
 
 names(df)
-# Define server logic required to draw a histogram
+
+
+
 shinyServer(function(input, output) {
   
    
@@ -50,71 +55,8 @@ shinyServer(function(input, output) {
   })
   
   
-  # output$slReculVoi <-  renderUI({
-  #   sliderInput(inputId = "UIreculvoi", 
-  #               label = bornes$noms[1],
-  #               min = bornes$minis[1], 
-  #               max= bornes$maxis[1], 
-  #               value=c(bornes$minis[1],bornes$maxis[1]) )
-  #  
-  # })
-  # 
-  # output$slReculFon <-  renderUI({
-  #   sliderInput(inputId = "UIreculfon", 
-  #               label = bornes$noms[2],
-  #               min = bornes$minis[2], 
-  #               max= bornes$maxis[2], 
-  #               value=c(bornes$minis[2],bornes$maxis[2]) )
-  #   
-  # })
-  # 
-  # output$slReculLat <-  renderUI({
-  #   sliderInput(inputId = "UIrecullat", 
-  #               label = bornes$noms[3],
-  #               min = bornes$minis[3], 
-  #               max= bornes$maxis[3], 
-  #               value=c(bornes$minis[3],bornes$maxis[3]) )
-  #   
-  # })
-  # 
-  # output$slCES <-  renderUI({
-  #   sliderInput(inputId = "UIces", 
-  #               label = bornes$noms[4],
-  #               min = bornes$minis[4], 
-  #               max= bornes$maxis[4], 
-  #               value=c(bornes$minis[4],bornes$maxis[4]) )
-  #   
-  # })
-  # output$slhIni <-  renderUI({
-  #   sliderInput(inputId = "UIhini", 
-  #               label = bornes$noms[5],
-  #               min = bornes$minis[5], 
-  #               max= bornes$maxis[5], 
-  #               value=c(bornes$minis[5],bornes$maxis[5]) )
-  #   
-  # })
-  # output$slslope <-  renderUI({
-  #   sliderInput(inputId = "UIslope", 
-  #               label = bornes$noms[6],
-  #               min = bornes$minis[6], 
-  #               max= bornes$maxis[6], 
-  #               value=c(bornes$minis[6],bornes$maxis[6]) )
-  #   
-  # })
-  # output$slhMax<-  renderUI({
-  #   sliderInput(inputId = "UIhmax", 
-  #               label = bornes$noms[7],
-  #               min = bornes$minis[7], 
-  #               max= bornes$maxis[7], 
-  #               value=c(bornes$minis[7],bornes$maxis[7]) )
-  #   
-  # })
-  # 
   output$nuagePlot <- renderPlotly({
-    
-    
-   
-    
+
     subsetdf <- df[
                       df$distReculVoirie >= input$UIreculvoi[1]
                        & df$distReculVoirie <= input$UIreculvoi[2]
@@ -131,11 +73,7 @@ shinyServer(function(input, output) {
                        &df$hauteurMax >= input$UIhmax[1]
                        & df$hauteurMax <= input$UIhmax[2]
                       ,]
-    #                    select = c(gini, moran,densite,coverageRatio )
-    #                    
-    #                    
-    # )
-  
+
     plot_ly(subsetdf, y = ~gini, x = ~moran, z = ~densite, 
             color= ~coverageRatio, 
                 mode="markers", 
