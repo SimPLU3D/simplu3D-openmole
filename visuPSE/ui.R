@@ -83,9 +83,7 @@ shinyUI(
                   max= 24, 
                   value=c(6,24) )
       
-      ,  
-      verbatimTextOutput("event")
-      
+     
       , width =3 )
     
     ,
@@ -93,6 +91,7 @@ shinyUI(
   # Show a plot of the generated distribution
   mainPanel(
     plotlyOutput("nuagePlot", width = "auto"),
+    verbatimTextOutput("event"),
     imageOutput("imgConfig")
     )
 )
