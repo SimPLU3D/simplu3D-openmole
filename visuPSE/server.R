@@ -10,6 +10,7 @@
 library(shiny)
 library(plotly)
 library(maptools)
+library(scales)
 #library(dplyr)
 
 
@@ -75,8 +76,24 @@ bornes <- data.frame(noms, minis, maxis)
 names(dfpse)
 
 # pour ne pas toujours lire le fichier de parcelle
-
 zone <- readShapePoly("parcelle")
+#hauteur max pour couleur des batiments dans le plot SHP
+maxHaut <- max(dfpse$hauteurMax)
+
+
+
+
+palette <- colorRampPalette(brewer.pal(9, "Blues"))
+listeValLegend <- paste(as.character(round(seq(from = 0 , to = 24, by=3), digits = 2)), "m", sep=" ")
+
+
+#fonction pour interpoler la couleur avecf un vecteur de hauteur
+
+interpolColor <- function(vect){
+  idxcol <- round(rescale(vect,from=c(0,100)))
+  return(palette[idxcol])
+}
+
 
 shinyServer(function(input, output) {
   
@@ -154,9 +171,15 @@ shinyServer(function(input, output) {
      # Generate a png
      png(outfile, width=400, height=400)
      plot(zone,col="gray95")
+     
     config <- readShapePoly(dfpse[(evd$pointNumber+1),12])
-     plot(config, add=T, col="gray25")
-     dev.off()
+    config$idx <-round(rescale(config$Hauteur,from=c(0,maxHaut),to=c(0,100)))
+    config$col <- sapply(config$idx, FUN = getElement,object=palette(100))
+    
+     plot(config, add=T, col=config$col)
+     legend("topright", title="hauteur", legend= listvaleurlegend, fill= palette(length(listeValLegend)), horiz=F, cex=0.8)
+     
+          dev.off()
      
       lili <- list(src = outfile,
            alt = "")
