@@ -11,19 +11,21 @@ library(shiny)
 library(plotly)
 library(maptools)
 library(scales)
+library(RColorBrewer)
 #library(dplyr)
 
 
 
 
 
-setwd("/home/pchapron/dev/simplu3D-openmole/visuPSE/")
+
 dfpse <- read.csv("population400000.csv",header = T)  
 names(dfpse) <-c("generationEvol",names(dfpse)[2:12],"samplesEvol")
 dfpse<- dfpse[,2:12]
 
 dfsimu <- read.csv("energy.csv", header = T, colClasses = c("seed"="character"))
-str(dfsimu)
+
+nrow(dfpse)
 
 
 colsEnCommun <- intersect(names(dfsimu), names(dfpse))
@@ -62,7 +64,7 @@ dfpse$shpPath <- paste("PSEshp/run_",(dfsimu$seed[idxSimu]),"out.shp", sep="")
 
 
 dfpse$shpPath <- normalizePath(dfpse$shpPath)
-
+dfpse$moranProfile <- dfsimu$moranProfile[idxSimu]
 
 
 
@@ -73,7 +75,7 @@ maxis <- apply(dfpse[,1:7],MARGIN = 2,max)
 noms <- names(dfpse)[1:7]
 bornes <- data.frame(noms, minis, maxis)
 
-names(dfpse)
+
 
 # pour ne pas toujours lire le fichier de parcelle
 zone <- readShapePoly("parcelle")
@@ -94,103 +96,143 @@ interpolColor <- function(vect){
   return(palette[idxcol])
 }
 
+colsPointInteret <- c("gini", "moran", "densite", "moranProfile")
+
+
 
 shinyServer(function(input, output) {
   
-   
+  # output$event <- renderPrint({
+  #   evd <- event_data("plotly_hover")
+  #   if (is.null(evd))
+  #     "y rien là "
+  #   else {
+  #     gini <-  round( dfpse[(evd$pointNumber + 1), 8], digits = 3) 
+  #     moran <-  round( dfpse[(evd$pointNumber + 1), 9], digits = 3) 
+  #     densite <-  round( dfpse[(evd$pointNumber + 1), 10], digits = 3) 
+  #     cov <-  round( dfpse[(evd$pointNumber + 1), 11], digits = 3) 
+  #     
+  #                   paste(
+  #                     "Gini :",gini,
+  #                     "Moran :" , moran,
+  #                     "Densité :" , densite,
+  #                     "Coverage Ratio :",cov
+  #                     
+  #                   )
+  #   }
+  #   
+  # })
+    
   
-  
-  output$event <- renderPrint({
-    evd <- event_data("plotly_hover")
-    if (is.null(evd))
-      "y rien là "
-    else {
-      gini <-  round( dfpse[(evd$pointNumber + 1), 8], digits = 3) 
-      moran <-  round( dfpse[(evd$pointNumber + 1), 9], digits = 3) 
-      densite <-  round( dfpse[(evd$pointNumber + 1), 10], digits = 3) 
-      cov <-  round( dfpse[(evd$pointNumber + 1), 11], digits = 3) 
-      
-                    paste(
-                      "Gini :",gini,
-                      "Moran :" , moran,
-                      "Densité :" , densite,
-                      "Coverage Ratio :",cov
-                    )
-    }
+  subsetdfpse <- reactive({
+    currentdfpse <- sample_n(dfpse, size = input$nbpoints)
+    currentdfpse[
+      currentdfpse$distReculVoirie >= input$UIreculvoi[1]
+      & currentdfpse$distReculVoirie <= input$UIreculvoi[2]
+      & currentdfpse$distReculFond >= input$UIreculfon[1]
+      & currentdfpse$distReculFond <= input$UIreculfon[2]
+      & currentdfpse$distReculLat >= input$UIrecullat[1]
+      & currentdfpse$distReculLat <= input$UIrecullat[2]
+      & currentdfpse$maximalCES >= input$UIces[1]
+      & currentdfpse$maximalCES <= input$UIces[2]
+      & currentdfpse$hIniRoad >= input$UIhini[1]
+      & currentdfpse$hIniRoad <= input$UIhini[2]
+      & currentdfpse$slopeRoad >= input$UIslope[1]
+      & currentdfpse$slopeRoad <= input$UIslope[2]
+      &currentdfpse$hauteurMax >= input$UIhmax[1]
+      & currentdfpse$hauteurMax <= input$UIhmax[2]
+      ,]
     
   })
-                                    
+                                  
   
   output$nuagePlot <- renderPlotly({
+    # currentdfpse <- sample_n(dfpse, size = input$nbpoints)
+    # subsetdfpse <- currentdfpse[
+    #                   currentdfpse$distReculVoirie >= input$UIreculvoi[1]
+    #                    & currentdfpse$distReculVoirie <= input$UIreculvoi[2]
+    #                    & currentdfpse$distReculFond >= input$UIreculfon[1]
+    #                    & currentdfpse$distReculFond <= input$UIreculfon[2]
+    #                    & currentdfpse$distReculLat >= input$UIrecullat[1]
+    #                    & currentdfpse$distReculLat <= input$UIrecullat[2]
+    #                    & currentdfpse$maximalCES >= input$UIces[1]
+    #                    & currentdfpse$maximalCES <= input$UIces[2]
+    #                    & currentdfpse$hIniRoad >= input$UIhini[1]
+    #                    & currentdfpse$hIniRoad <= input$UIhini[2]
+    #                    & currentdfpse$slopeRoad >= input$UIslope[1]
+    #                    & currentdfpse$slopeRoad <= input$UIslope[2]
+    #                    &currentdfpse$hauteurMax >= input$UIhmax[1]
+    #                    & currentdfpse$hauteurMax <= input$UIhmax[2]
+    #                   ,]
 
-    subsetdfpse <- dfpse[
-                      dfpse$distReculVoirie >= input$UIreculvoi[1]
-                       & dfpse$distReculVoirie <= input$UIreculvoi[2]
-                       & dfpse$distReculFond >= input$UIreculfon[1]
-                       & dfpse$distReculFond <= input$UIreculfon[2]
-                       & dfpse$distReculLat >= input$UIrecullat[1]
-                       & dfpse$distReculLat <= input$UIrecullat[2]
-                       & dfpse$maximalCES >= input$UIces[1]
-                       & dfpse$maximalCES <= input$UIces[2]
-                       & dfpse$hIniRoad >= input$UIhini[1]
-                       & dfpse$hIniRoad <= input$UIhini[2]
-                       & dfpse$slopeRoad >= input$UIslope[1]
-                       & dfpse$slopeRoad <= input$UIslope[2]
-                       &dfpse$hauteurMax >= input$UIhmax[1]
-                       & dfpse$hauteurMax <= input$UIhmax[2]
-                      ,]
-
-    plot_ly(subsetdfpse, y = ~gini, x = ~moran, z = ~densite, 
-            color= ~coverageRatio, 
+    
+    subsetdfpse <- subsetdfpse()
+    
+    idxmin <- sapply(subsetdfpse[,colsPointInteret],which.min)
+    idxmax <- sapply(subsetdfpse[,colsPointInteret],which.max)
+    pointsInteret <- subsetdfpse[append(idxmin,idxmax),colsPointInteret]
+    pointsInteret$label <- c("minGini", "minMoran", "minDensite", "minMoranProfile", "maxGini", "maxMoran", "maxDensite", "maxMoranProfile")
+    
+    
+    
+    p3d<- plot_ly(subsetdfpse, y = ~gini, x = ~moran, z = ~densite, 
+            color= ~moranProfile, 
                 mode="markers", 
             type="scatter3d",
             hoverinfo="text",
             text = ~paste("", 'moran: ', round(moran, digits = 3), 
                           '</br> gini: ', round(gini, digits = 3),
                           '</br> densité: ', round(densite, digits  =3) ,
-                          '</br> Coverage', round(coverageRatio, digits = 3)),
-             showlegend=T,
+                          '</br> moranProfile:', round(moranProfile, digits = 3)),
+             showlegend=F,
             marker = list(size = 2, 
                           opacity=0.5, 
-                          line = list(width = 0.1, color="gray25"))
+                          line = list(width = 0.1, color="gray25") )
      
     ,width = 500, height = 400)
-  })
+    add_markers(p3d,
+             data=pointsInteret, type="scatter3d",
+             marker=list(size=2, opacity=0.8, color="red", text ),
+             text = ~label, textposition = 'bottom',
+             textfont = list(color = '#FF0000', size = 10), showlegend=F, name="")
+ 
+    })
   
   output$imgConfig <- renderImage({
     evd <- event_data("plotly_hover")
-    if (is.null(evd)) 
-    {
-      lili <- list(src="img/creeper.png")
-      }
-    else {
-   
-     lili <- list(src=dfpse[(evd$pointNumber+1),12])
+    req(evd)
+    subsetdfpse <- subsetdfpse()
+     lili <- list(src=subsetdfpse[(evd$pointNumber+1),12])
      outfile <- tempfile(fileext='.png')
      
      # Generate a png
      png(outfile, width=400, height=400)
      plot(zone,col="gray95")
      
-    config <- readShapePoly(dfpse[(evd$pointNumber+1),12])
+    config <- readShapePoly(subsetdfpse[(evd$pointNumber+1),12])
     config$idx <-round(rescale(config$Hauteur,from=c(0,maxHaut),to=c(0,100)))
     config$col <- sapply(config$idx, FUN = getElement,object=palette(100))
     
      plot(config, add=T, col=config$col)
-     legend("topright", title="hauteur", legend= listvaleurlegend, fill= palette(length(listeValLegend)), horiz=F, cex=0.8)
+     legend("topright", title="hauteur", legend= listeValLegend, fill= palette(length(listeValLegend)), horiz=F, cex=0.8)
      
           dev.off()
      
-      lili <- list(src = outfile,
-           alt = "")
-     }
-    lili
+    list(src = outfile, alt = "")
     
 },deleteFile = T )
     
   
   
+  output$tabregles<- renderTable({
+    evd <- event_data("plotly_hover")
+    req(evd)
+    
+    subsetdfpse<- subsetdfpse()
+    currentConfig<- t(subsetdfpse[(evd$pointNumber+1), colsEnCommun])
+    currentConfig
+  }, colnames = T, rownames = T)
+  
+  
 })
 
-plot(rnorm)
-dev.off()
