@@ -12,7 +12,7 @@ library(plotly)
 library(maptools)
 library(scales)
 library(RColorBrewer)
-#library(dplyr)
+library(dplyr)
 
 
 
