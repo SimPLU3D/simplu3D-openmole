@@ -25,7 +25,16 @@ dfpse<- dfpse[,2:12]
 
 dfsimu <- read.csv("energy.csv", header = T, colClasses = c("seed"="character"))
 
-nrow(dfpse)
+
+
+
+
+
+# noms des dimensions à afficher dans le nuage de points 3D 
+colsPointInteret <- c("gini", "moran", "densite", "coverageRatio")
+# label des points min et max des colonnes ci dessus 
+labelPointsInteret <- c("minGini", "minMoran", "minDensite", "minCoverage", "maxGini", "maxMoran", "maxDensite", "maxCoverage")
+
 
 
 colsEnCommun <- intersect(names(dfsimu), names(dfpse))
@@ -96,9 +105,10 @@ interpolColor <- function(vect){
   return(palette[idxcol])
 }
 
-colsPointInteret <- c("gini", "moran", "densite", "moranProfile")
 
 
+
+  
 
 
 shinyServer(function(input, output) {
@@ -125,25 +135,6 @@ shinyServer(function(input, output) {
   })
                                   
   
-  # output$scatter <- renderPlotly({
-  #   subsetdfpse <- subsetdfpse()
-  #   
-  #   idxmin <- sapply(subsetdfpse[,colsPointInteret],which.min)
-  #   idxmax <- sapply(subsetdfpse[,colsPointInteret],which.max)
-  #   pointsInteret <- subsetdfpse[append(idxmin,idxmax),colsPointInteret]
-  #   pointsInteret$label <- c("minGini", "minMoran", "minDensite", "minMoranProfile", "maxGini", "maxMoran", "maxDensite", "maxMoranProfile")
-  #   
-  #   evd <- event_data("plotly_hover")
-  #   scat<-plot_ly(subsetdfpse, x=~gini, y=~moran)
-  #   mark <- subsetdfpse[(evd$pointNumber+1),c("gini","moran")]
-  #   scat <- add_markers(scat, 
-  #                       data=mark, 
-  #                       marker=list(size=2, opacity=0.8, color="orange")
-  #                       
-  #                       )
-  #   
-  #   scat 
-  # })
   
   output$nuagePlot <- renderPlotly({
   
@@ -153,12 +144,11 @@ shinyServer(function(input, output) {
     idxmin <- sapply(subsetdfpse[,colsPointInteret],which.min)
     idxmax <- sapply(subsetdfpse[,colsPointInteret],which.max)
     pointsInteret <- subsetdfpse[append(idxmin,idxmax),colsPointInteret]
-    pointsInteret$label <- c("minGini", "minMoran", "minDensite", "minMoranProfile", "maxGini", "maxMoran", "maxDensite", "maxMoranProfile")
-    
+    pointsInteret$label <- labelPointsInteret
     
     
     p3d<- plot_ly(subsetdfpse, y = ~gini, x = ~moran, z = ~densite, 
-            color= ~moranProfile, 
+            color= ~coverageRatio, 
                 mode="markers", 
             type="scatter3d",
             hoverinfo="text",
