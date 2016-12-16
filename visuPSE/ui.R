@@ -102,7 +102,7 @@ shinyUI(
       
       # Show a plot of the generated distribution
       mainPanel(
-        plotlyOutput("nuagePlot", width = "auto"),
+       plotlyOutput("nuagePlot"),
        # verbatimTextOutput("event"),
         fluidRow(column(6,
                         imageOutput("imgConfig")),

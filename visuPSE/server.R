@@ -100,29 +100,8 @@ colsPointInteret <- c("gini", "moran", "densite", "moranProfile")
 
 
 
+
 shinyServer(function(input, output) {
-  
-  # output$event <- renderPrint({
-  #   evd <- event_data("plotly_hover")
-  #   if (is.null(evd))
-  #     "y rien là "
-  #   else {
-  #     gini <-  round( dfpse[(evd$pointNumber + 1), 8], digits = 3) 
-  #     moran <-  round( dfpse[(evd$pointNumber + 1), 9], digits = 3) 
-  #     densite <-  round( dfpse[(evd$pointNumber + 1), 10], digits = 3) 
-  #     cov <-  round( dfpse[(evd$pointNumber + 1), 11], digits = 3) 
-  #     
-  #                   paste(
-  #                     "Gini :",gini,
-  #                     "Moran :" , moran,
-  #                     "Densité :" , densite,
-  #                     "Coverage Ratio :",cov
-  #                     
-  #                   )
-  #   }
-  #   
-  # })
-    
   
   subsetdfpse <- reactive({
     currentdfpse <- sample_n(dfpse, size = input$nbpoints)
@@ -146,25 +125,28 @@ shinyServer(function(input, output) {
   })
                                   
   
+  # output$scatter <- renderPlotly({
+  #   subsetdfpse <- subsetdfpse()
+  #   
+  #   idxmin <- sapply(subsetdfpse[,colsPointInteret],which.min)
+  #   idxmax <- sapply(subsetdfpse[,colsPointInteret],which.max)
+  #   pointsInteret <- subsetdfpse[append(idxmin,idxmax),colsPointInteret]
+  #   pointsInteret$label <- c("minGini", "minMoran", "minDensite", "minMoranProfile", "maxGini", "maxMoran", "maxDensite", "maxMoranProfile")
+  #   
+  #   evd <- event_data("plotly_hover")
+  #   scat<-plot_ly(subsetdfpse, x=~gini, y=~moran)
+  #   mark <- subsetdfpse[(evd$pointNumber+1),c("gini","moran")]
+  #   scat <- add_markers(scat, 
+  #                       data=mark, 
+  #                       marker=list(size=2, opacity=0.8, color="orange")
+  #                       
+  #                       )
+  #   
+  #   scat 
+  # })
+  
   output$nuagePlot <- renderPlotly({
-    # currentdfpse <- sample_n(dfpse, size = input$nbpoints)
-    # subsetdfpse <- currentdfpse[
-    #                   currentdfpse$distReculVoirie >= input$UIreculvoi[1]
-    #                    & currentdfpse$distReculVoirie <= input$UIreculvoi[2]
-    #                    & currentdfpse$distReculFond >= input$UIreculfon[1]
-    #                    & currentdfpse$distReculFond <= input$UIreculfon[2]
-    #                    & currentdfpse$distReculLat >= input$UIrecullat[1]
-    #                    & currentdfpse$distReculLat <= input$UIrecullat[2]
-    #                    & currentdfpse$maximalCES >= input$UIces[1]
-    #                    & currentdfpse$maximalCES <= input$UIces[2]
-    #                    & currentdfpse$hIniRoad >= input$UIhini[1]
-    #                    & currentdfpse$hIniRoad <= input$UIhini[2]
-    #                    & currentdfpse$slopeRoad >= input$UIslope[1]
-    #                    & currentdfpse$slopeRoad <= input$UIslope[2]
-    #                    &currentdfpse$hauteurMax >= input$UIhmax[1]
-    #                    & currentdfpse$hauteurMax <= input$UIhmax[2]
-    #                   ,]
-
+  
     
     subsetdfpse <- subsetdfpse()
     
@@ -202,7 +184,6 @@ shinyServer(function(input, output) {
     evd <- event_data("plotly_hover")
     req(evd)
     subsetdfpse <- subsetdfpse()
-     lili <- list(src=subsetdfpse[(evd$pointNumber+1),12])
      outfile <- tempfile(fileext='.png')
      
      # Generate a png
