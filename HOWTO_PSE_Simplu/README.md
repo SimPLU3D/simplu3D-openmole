@@ -28,7 +28,7 @@ Il s'agit d'appliquer la methode PSE (Pattern Space Exploration) d'openMOLE sur 
 PSE échantillone l'espace d'entrée de SIMPLU de façon à maximiser la diversité des configurations obtenues en sortie, dans un espace de mesures choisies par l'utilisateur.
 
 
-## vue d'ensemble
+## Vue d'ensemble
 
 Le processus se découpe en trois étapes
 
@@ -154,10 +154,10 @@ object Simplu3DTask {
   }
 ```
 
-Le resultat de cette tâche est celui de l'appel de la fonction `run2` qui se trouve dans le repository `simplu3D/src/main/java/fr/ign/cogit/simplu3d/experiments/openmole/RunTask.java`
+Le resultat de cette tâche est celui de la fonction `run2` qui se trouve dans le repository `simplu3D/src/main/java/fr/ign/cogit/simplu3d/experiments/openmole/RunTask.java`
 (branche `refactoring reader`)
 
-**C'est là que se décrit la véritable interface entre la tâche openMOLE et SIMPLU**
+C'est là qu'on décrit la véritable interface entre la tâche openMOLE et SIMPLU
 
 ### Entrées / Sorties côté SIMPLU 
 
@@ -165,8 +165,8 @@ Le resultat de cette tâche est celui de l'appel de la fonction `run2` qui se tr
 public static TaskExploPSE run2(File folder, File folderOut, File parameterFile,
       double distReculVoirie, double distReculFond, double distReculLat,
       double maximalCES, double hIniRoad, double slopeRoad, double hauteurMax,
-      long seed) throws Exception
-      ```
+      long seed) throws Exception{}
+```
 Le type de retour `TaskExploPSE` est le suivant :
 ```java
 public  double energyTot;
@@ -185,12 +185,16 @@ et il devrait lui aussi être modifié en cas d'ajout/soustraction de mesures de
 
 C'est une exécution "silencieuse" de SIMPLU (sans GUI) qui calcule des mesures sur la configuration bâtie une fois qu'elle est générée.
 
+Le code se trouve dans la classe RunTask qui se trouve dans la branche `refactoring_reader` de simplu3D.
+
+`/simplu3D/src/main/java/fr/ign/cogit/simplu3d/experiments/openmole/RunTask.java`
+
 
 Si on voulait ajouter des mesures à la sortie de Simplu, il faudrait modifier cette fonction pour y ajouter/retrancher des mesures, regénérer le plugin simplu3D, le recharger dans openMOLE et relancer l'exploration.
 
 
 
-La méthode PSE est appellée
+La méthode PSE est appellée par ce code :
 ```scala
 
 val pse =
@@ -220,6 +224,14 @@ val evolution =
     termination = 400000
   )
 ```
+
+ `genome` est la liste des entrées que PSE va faire varier lorsqu'il cherche à maximiser la diversité des sorties. 
+
+`objective` est la liste des mesures qui forment l'espace que  PES doit couvrir au mieux.
+
+
+
+
 
 Cette ligne déclare l'envirionnement de la grille EGI sur la virtual organization "complex systems"
 ```scala
