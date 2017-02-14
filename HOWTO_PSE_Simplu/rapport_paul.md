@@ -40,6 +40,164 @@ Le processus se découpe en trois étapes
 
 
 
+## Etape 1 : PSE
+
+PSE est une méthode qui cherche des points dans un espace de sortie (outputs) en maximisant le nombre et la diversité de ces points.
+Pour chaque point (i.e. combinaison d'outputs) trouvé, on dispose des paramètres (inputs) qui ont mené à ce point.
+L'ensemble de ces points est mis dans un fichier csv `populationXXXXX.csv` où XXXX représente l'itération de la méthode.
+
+C'est une méthode open-ended, elle s'arrète après un certain nombre d'itération donné en paramètre.
+
+
+
+Le script openMOLE se trouve dans le fichier  `pse_Simplu.oms`
+
+Il commence par un certain nombre de déclarations : repertoire où se trouvent les entrées et les sorties de l'éxécution d'openMOLE (sur la machine qui le fait tourner)
+
+```scala
+import simplu3dopenmoleplugin._
+
+val inputFolder = Val[File]
+val paramFile = Val[File]
+val outputFolder = Val[File]
+```
+
+puis les paramètres d'entrée de SIMPLU sont déclarés :
+
+```scala
+val distReculVoirie = Val[Double]
+val distReculFond = Val[Double]
+val distReculLat = Val[Double]
+val maximalCES = Val[Double]
+val hIniRoad = Val[Double]
+val slopeRoad = Val[Double]
+val hauteurMax = Val[Double]
+val seed = Val[Long]
+```
+
+puis les mesures (=sorties) de SIMPLU
+
+```scala
+val energy = Val[Double]
+val coverageRatio = Val[Double]
+val gini = Val[Double]
+val moran = Val[Double]
+val entropy = Val[Double]
+val boxCount = Val[Double]
+val maxHeight = Val[Double]
+val densite = Val[Double]
+```
+
+La ligne ci-dessous crée la liste `modelOutputs` qui est en fait la sortie de SIMPLU du *point de vue d'openMOLE*. C'est ce qui sera écrit dans les ligne du fichier `populationXXXXX.csv`.
+On veut donc bien les paramètres d'entrée de SIMPLU : `distReculVoirie, distReculFond ,distReculLat, maximalCES , hIniRoad , slopeRoad ,hauteurMax, seed`
+ainsi que toutes les sorties que SIMPLU produit pour le moment : `energy, coverageRatio, gini,moran,entropy,boxCount,maxHeight,densite`
+
+```scala
+def modelOutputs = Seq(distReculVoirie, distReculFond ,distReculLat, maximalCES ,
+  hIniRoad , slopeRoad ,hauteurMax, seed, energy, coverageRatio,
+   gini,moran,entropy,boxCount,maxHeight,densite)
+```
+
+
+L'objet `model` (une tâche openMOLE ScalaTask) est créé de façon à embarquer l'exécution de simplu et de son contexte.
+
+
+```scala
+val model =
+  ScalaTask("""
+    |val (energy, coverageRatio,gini,moran,entropy,boxCount,maxHeight,densite , outputFolder) =
+    |   simplu3dopenmoleplugin.Simplu3DTask(inputFolder, newDir(), paramFile,  distReculVoirie, distReculFond, distReculLat, maximalCES, hIniRoad, slopeRoad, hauteurMax, seed)
+    |""".stripMargin) set (
+    //om.name := "simplu3dTask"
+    plugins += pluginsOf(Simplu3DTask),
+      inputs += (
+      inputFolder,
+      paramFile,  
+      distReculVoirie,
+      distReculFond,
+      distReculLat,
+      maximalCES,
+      hIniRoad,
+      slopeRoad,
+      hauteurMax,
+      seed),
+    outputs += outputFolder,
+    outputs += (modelOutputs: _*),
+    inputFolder := workDirectory / "data",
+    paramFile := workDirectory / "recuit_normal.xml"
+  )
+```
+
+Ici , le contexte d'éxécution c'est
+
+- le plugin Simplu3DTask, qui est une façon particulière d'appeller l'exécution de SimPLU en scala
+- les inputs **du point de vue de SimPLU** : un repertoire où lire les entrées, un fichier de paramètre xml pour l'algo de recuit, et les paramètres des règles.
+- les outputs **du point de vu d'openMOLE**, définis plus haut : c'est ce qu'openMOLE récupère d'une éxécution du modèle.
+- les repertoires d'input  et d'output sur la machine sur laquelle on a lancé openMOLE
+- le fichier de paramètres du recuit : "recuit_normal.xml"
+
+
+`Simplu3DTask` est un petit bout de code scala (trouvable sur le repository simplu3D-openmole/src/main/scala/simplu3dopenmoleplugin/Simplu3DTask.scala)
+qui définit une tâche openMOLE particulière :
+
+```scala
+object Simplu3DTask {
+  def apply(inputFolder: File, outputFolder: File, paramFile: File,
+    distReculVoirie: Double, distReculFond: Double,
+    distReculLat: Double, maximalCES: Double, hIniRoad: Double,
+    slopeRoad: Double, hauteurMax: Double, seed: Long): (Double, Double, Double, Double, Double, Double, Double, Double, Double, File) = {
+    val res = RunTask.run2(inputFolder, outputFolder, paramFile,
+      distReculVoirie, distReculFond,
+      distReculLat, maximalCES, hIniRoad,
+      slopeRoad, hauteurMax, seed)
+    (res.energyTot, res.coverageRatio, res.gini, res.moran, res.entropy, res.boxCount, res.maxHeight, res.densite, res.profileMoran, outputFolder)
+  }
+```
+
+
+La méthode PSE est appellée
+```scala
+
+val pse =
+  PSE(
+    genome = Seq(
+      distReculVoirie in (0.0, 10.0),
+      distReculFond in (0.0, 10.0),
+      distReculLat in (0.0, 5.0),
+      maximalCES in (0.3, 1.0),
+      hIniRoad in (0.0, 15.0),
+      slopeRoad in (0.5, 3.0),
+      hauteurMax in (6.0, 24.0)),
+    objectives =  Seq(
+      gini in (0.0 to 1.0 by 0.1),
+      moran in (-0.2 to 0.5 by 0.01),
+      densite in (1.0 to 8.0 by 0.2   ),
+      coverageRatio in ( 0.0 to 1.0 by 0.1)  
+      ),
+    replication = Replication(seed = seed)
+ )
+
+val evolution =
+  SteadyStateEvolution(
+    algorithm = pse,
+    evaluation = model,
+    parallelism = 4000,
+    termination = 400000
+  )
+
+val env = EGIEnvironment("vo.complex-systems.eu")
+
+
+// Define a hook to save the Pareto frontier
+val savePopulationHook = SavePopulationHook(evolution, workDirectory / "pse")
+
+// Plug everything together to create the workflow
+(evolution hook savePopulationHook on env)
+```
+
+
+
+
 
 
 # Workflow alternatif
