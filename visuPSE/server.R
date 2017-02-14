@@ -155,7 +155,7 @@ shinyServer(function(input, output) {
             text = ~paste("", 'moran: ', round(moran, digits = 3), 
                           '</br> gini: ', round(gini, digits = 3),
                           '</br> densité: ', round(densite, digits  =3) ,
-                          '</br> moranProfile:', round(moranProfile, digits = 3)),
+                          '</br> coverageRatio:', round(coverageRatio, digits = 3)),
              showlegend=F,
             marker = list(size = 2, 
                           opacity=0.5, 
