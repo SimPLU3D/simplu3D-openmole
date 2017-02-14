@@ -3,7 +3,7 @@
 
 
 
-## Pré requis :
+## Pré requis
 
 - Une version fonctionnelle d'openMole avec les credentials pour taper dans la grille EGI .
 
