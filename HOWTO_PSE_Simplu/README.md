@@ -3,11 +3,11 @@
 
 
 
-## Prérequis :
+## Pré requis :
 
 - Une version fonctionnelle d'openMole avec les credentials pour taper dans la grille EGI .
 
-- une installation de geoxygène dans Eclipse pour pouvoir modifier un peu du code de SimPLU (les fichiers SHPWriter et les fichiers de mesures de morphologies) et le recompiler pour en obtenir un jar qu'on donne à openMOLE
+- une installation de geoxygene dans Eclipse pour pouvoir modifier un peu du code de SimPLU (les fichiers SHPWriter et les fichiers de mesures de morphologies) et le recompiler pour en obtenir un jar qu'on donne à openMOLE
 
 - `Rstudio` avec les librairies déclarées au début du fichier server.R :
 ```R
@@ -25,7 +25,7 @@ library(dplyr)
 
 Il s'agit d'appliquer la methode PSE (Pattern Space Exploration) d'openMOLE sur SIMPLU.
 
-PSE échantillone l'espace d'entrée de SIMPLU de façon à maximiser la diversité des configurations obtenues en sortie, dans un espace de mesures choisies par l'utilisateur.
+PSE échantillonne l'espace d'entrée de SIMPLU de façon à maximiser la diversité des configurations obtenues en sortie, dans un espace de mesures choisies par l'utilisateur.
 
 
 ## Vue d'ensemble
@@ -34,26 +34,26 @@ Le processus se découpe en trois étapes
 
 1. PSE trouve les configurations possibles et produit des fichiers `populationXXXXX.csv`
 
-2. Repliquer la génération de bâtiments avec les paramètres des configurations trouvées par PSE, et conserver les fichier SHP de ces configurations
+2. Répliquer la génération de bâtiments avec les paramètres des configurations trouvées par PSE, et conserver les fichier SHP de ces configurations
 
-3. Matcher les resultats de PSE avec les SHP produites pour constituer les data que le visualisateur affiche.
+3. Matcher les résultats de PSE avec les SHP produites pour constituer les data que le visualisateur affiche.
 
 
 
-## Etape 1 : PSE
+## Étape 1 : PSE
 
 PSE est une méthode qui cherche des points dans un espace de sortie (outputs) en maximisant le nombre et la diversité de ces points.
 Pour chaque point (i.e. combinaison d'outputs) trouvé, on dispose des paramètres (inputs) qui ont mené à ce point.
 L'ensemble de ces points est mis dans un fichier csv `populationXXXXX.csv` où XXXX représente l'itération de la méthode.
 
-C'est une méthode open-ended, elle s'arrète après un certain nombre d'itération donné en paramètre.
+C'est une méthode open-ended, elle s'arrête après un certain nombre d'itération donné en paramètre.
 
 
 ### Explication du script openMOLE de PSE
 
 Le script openMOLE se trouve dans le fichier  `pse_Simplu.oms`
 
-Il commence par un certain nombre de déclarations : repertoire où se trouvent les entrées et les sorties de l'éxécution d'openMOLE (sur la machine qui le fait tourner)
+Il commence par un certain nombre de déclarations : répertoire où se trouvent les entrées et les sorties de l'exécution d'openMOLE (sur la machine qui le fait tourner)
 
 ```scala
 import simplu3dopenmoleplugin._
@@ -100,7 +100,7 @@ def modelOutputs = Seq(distReculVoirie, distReculFond ,distReculLat, maximalCES 
 ```
 
 
-L'objet `model` (une tâche openMOLE ScalaTask) est créé de façon à embarquer l'exécution de simplu et de son contexte pour le distribuer.
+L'objet `model` (une tâche openMOLE ScalaTask) est créé de façon à embarquer l'exécution de SIMPLU et de son contexte pour le distribuer.
 
 
 ```scala
@@ -132,12 +132,12 @@ Ici , On déclare :
 
 - la tâche elle-même : Simplu3DTask
 - les inputs **du point de vue de SimPLU** : un repertoire où lire les entrées, un fichier de paramètre xml pour l'algo de recuit, et les paramètres des règles.
-- les outputs **du point de vu d'openMOLE**, définis plus haut : c'est ce qu'openMOLE récupère d'une éxécution du modèle.
-- les repertoires d'input  et d'output sur la machine sur laquelle on a lancé openMOLE
-- le fichier de paramètres du recuit : "recuit_normal.xml"
+- les outputs **du point de vu d'openMOLE**, définis plus haut : c'est ce qu'openMOLE récupère d'une exécution du modèle.
+- les répertoires d'input  et d'output sur la machine sur laquelle on a lancé openMOLE
+- le fichier de paramètres du recuit : `recuit_normal.xml`
 
 
-`Simplu3DTask` est un petit bout de code scala (trouvable sur le repository simplu3D-openmole/src/main/scala/simplu3dopenmoleplugin/Simplu3DTask.scala)
+`Simplu3DTask` est un petit bout de code scala (trouvable sur le repository `simplu3D-openmole/src/main/scala/simplu3dopenmoleplugin/Simplu3DTask.scala`)
 qui définit une tâche openMOLE particulière :
 
 ```scala
@@ -154,7 +154,7 @@ object Simplu3DTask {
   }
 ```
 
-Le resultat de cette tâche est celui de la fonction `run2` qui se trouve dans le repository `simplu3D/src/main/java/fr/ign/cogit/simplu3d/experiments/openmole/RunTask.java`
+Le résultat de cette tâche est celui de la fonction `run2` qui se trouve dans le repository `simplu3D/src/main/java/fr/ign/cogit/simplu3d/experiments/openmole/RunTask.java`
 (branche `refactoring reader`)
 
 C'est là qu'on décrit la véritable interface entre la tâche openMOLE et SIMPLU
@@ -227,13 +227,14 @@ val evolution =
 
  `genome` est la liste des entrées que PSE va faire varier lorsqu'il cherche à maximiser la diversité des sorties. 
 
-`objective` est la liste des mesures qui forment l'espace que  PES doit couvrir au mieux.
+`objective` est la liste des dimensions  qui forment l'espace que PSE doit couvrir au mieux.
+
+La tâche `evolution` est la tâche d'exploration de PSE. C'est une tâche d'un type spécifique ( SteadyStateEvolution) : il s'agit d'exécuter 400000 fois la méthode pse, en demandant de soumettre l'exécution de SIMPLU à 4000 nœuds sur la grille.
+Ce qui fait office de méthode d'évaluation est la tâche `model` elle-même (ses sorties).
 
 
 
-
-
-Cette ligne déclare l'envirionnement de la grille EGI sur la virtual organization "complex systems"
+Cette ligne déclare l'environnement de la grille EGI sur la virtual organization "complex systems"
 ```scala
  env = EGIEnvironment("vo.complex-systems.eu")
 ```
@@ -248,16 +249,99 @@ val savePopulationHook = SavePopulationHook(evolution, workDirectory / "pse")
 
 Cette ligne est la plus importante de toutes, c'est le workflow en lui même :
 
-Le hook qui sauve les résultats dans le fichier est accroché à la tâche `evolution` et s'éxécute sur l'environnement `env`.
+Le hook qui sauve les résultats dans le fichier est accroché à la tâche `evolution` et s'exécute sur l'environnement `env`.
 
 ```scala
 // Plug everything together to create the workflow
 (evolution hook savePopulationHook on env)
 ```
 
+### Format des résultats de PSE
+
+
+# Étape  2 Réplication et génération des configuration résultats
+
+
+## Générer des fichiers SHP 
+
+A l'époque de la première exploration PSE entreprise avec SIMPLU il n'était pas possible d'obtenir directement le fichier SHP correspondant à la configuration bâtie que SIMPLU générait (problème de packaging du code, résolu depuis par Imran).
+
+Ce n'est pas plus mal puisque ça réduit le temps d'exécution de SIMPLU et ça réduit les entrées sorties à de l'écriture de ligne dans un fichier CSV.
+
+L'inconvénient c'est qu'une fois que PSE est terminée , les résultats ne sont donnés que sous la forme d'un fichier csv(` populationXXXXX.csv`) dont les première colonnes correspondent aux paramètres et les dernières aux mesures de sortie de SIMPLU. 
+Il faut donc re-générer les fichiers SHP à partir des paramètres d'entrée de ce fichier.
+
+C'est ce que fait le script suivant , avec un `CSVSampling`, qui est une tâche openMOLE spécialement conçue pour échantillonner les lignes d'un fichier. 
+
+TODO insérer script csvsampling 
+
+
+On peut alors appeler SIMPLU sur chacune des lignes du fichier `populationXXXXX.csv` et récupérer les fichiers SHP.
+
+# Matcher fichiers SHP et resultats PSE pour afficher. 
+
+
+La première étape du workflow a produit le fichier `populationXXXXX.csv` qui liste les configurations obtenues.
+La seconde étape du workflow produit à partir de ce fichier des fichiers SHP pour visualiser la forme des bâtiments.
+
+
+Si la seconde étape ne génère pas les configurations des lignes du fichier `populationXXXXX.csv` dans l'ordre **exact** des lignes, il faudra faire une mise en correspondance entre les paramètres d'entrée et les fichiers SHP générés.
+
+(Si on imagine qu'on délègue également la génération de fichiers SHP à OpenMOLE, il faut imaginer aussi qu'on recevra les configurations dans le désordre, et il faudra de toute façon gérer ce matching à posteriori)
 
 
 
+
+
+## Utilisation du code de visualisation des résultats.
+
+Pour fonctionner, le code des fichiers `server.R` et `client.R` du repository `simplu3D-openmole/visuPSE/`
+(branche results_pse)  a besoin de deux éléments : 
+- un répertoire qui contient les fichiers SHP (et autres .dbf, .shx et .prj .fix ) de chacune des lignes du fichier `populationXXXXX.csv`
+- le fichier `populationXXXXX.csv` produit par PSE .
+- le fichier `energy.csv` produit par SIMPLU.
+
+
+## Matching 
+
+
+le matching se fait de façon très simple en concaténant les valeurs des colonnes que les deux fichiers csv ont en commun.
+
+On se retrouve avec deux tableaux (dataframes) de données. L'un provient de PSE (`dfpse`) l'autre provient de la générations avec SIMPLU des configurations découvertes par PSE (`dfsimu`)
+
+On fait le matching en détectant les tuples en commun dans les deux tableaux.
+
+
+```R
+# noms de colonnes en commun entre les deux fichiers (dfsimu et dfpse)
+colsEnCommun <- intersect(names(dfsimu), names(dfpse))
+#parmi les colonnes communes, on prend que les colonnes des antécédents 
+colsEnCommun <- colsEnCommun[1:7]
+
+# on restreint les deux tableaux à ces colonnes
+lignesPSE <- dfpse[,colsEnCommun]
+lignesSimu <- dfsimu[,colsEnCommun]
+
+
+# on fait un hash en concaténant les colonnes 
+lignesSimu$hash <- apply(lignesSimu, MARGIN = 1 , paste0, collapse="" )
+lignesPSE$hash <- apply(lignesPSE, MARGIN = 1 , paste0, collapse="" )
+
+
+# fonction retourne l'index de la ligne du dataframe dfsimu qui correspond à la list de carac en paramètres
+matchingPSESimu <- function(hash){
+  return(match(hash, lignesSimu$hash))
+}
+
+# idx des lignes de dfsimu correspondant aux lignes de dfpse
+idxSimu <- matchingPSESimu(lignesPSE$hash)
+
+
+# on crée un attribut shppath pour stocker le path de la figure qui matche sur la ligne
+dfpse$shpPath <- paste("PSEshp/run_",(dfsimu$seed[idxSimu]),"out.shp", sep="")
+
+
+```
 
 
 # Workflow alternatif
