@@ -29,9 +29,7 @@ val model =
     |val (energy, coverageRatio,gini,moran,entropy,boxCount,maxHeight,densite , outputFolder) =
     |   simplu3dopenmoleplugin.Simplu3DTask(inputFolder, newDir(), paramFile,  distReculVoirie, distReculFond, distReculLat, maximalCES, hIniRoad, slopeRoad, hauteurMax, seed)
     |""".stripMargin) set (
-    //om.name := "simplu3dTask"
     plugins += pluginsOf(Simplu3DTask),
-  //  inputs += (inputFolder, paramFile, idBPU, distReculVoirie, distReculFond, distReculLat, maximalCES, hIniRoad, slopeRoad, hauteurMax, seed),
     inputs += (
       inputFolder, 
       paramFile,  
