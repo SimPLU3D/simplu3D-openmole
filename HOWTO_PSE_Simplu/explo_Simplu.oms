@@ -1,0 +1,95 @@
+import simplu3dopenmoleplugin._
+
+val inputFolder = Val[File]
+val paramFile = Val[File]
+val outputFolder = Val[File]
+
+val distReculVoirie = Val[Double]
+val distReculFond = Val[Double]
+val distReculLat = Val[Double]
+val maximalCES = Val[Double]
+val hIniRoad = Val[Double]
+val slopeRoad = Val[Double]
+val hauteurMax = Val[Double]
+val seed = Val[Long]
+
+val energy = Val[Double]
+val coverageRatio = Val[Double]
+val gini = Val[Double]
+val moran = Val[Double]
+val entropy = Val[Double]
+val boxCount = Val[Double]
+val maxHeight = Val[Double]
+val densite = Val[Double]
+
+val rangeReculVoirie =  (0.0 to 10.0 by 0.5) //On pourrait mettre un pas de 1 m
+val rangeReculFond =  (0.0 to 10.0 by 0.5) //On pourrait mettre un pas de 1 
+val rangeReculLat = (0.0 to 5.0 by 0.5) //idem
+val rangeMaxCES =  (0.3 to 1 by 0.1) 
+val rangeHIniRoad =  (0.0 to 15.0 by 1.0) //paramètre à l'effet mal saisi
+val rangeSlope =  (0.5 to 3 by 0.5)
+val rangeHMax = (6.0 to 24.0 by 3.0) //le 24 peut être remplacé par 15
+
+val explo = ExplorationTask(
+  ((distReculVoirie in rangeReculVoirie) x
+  (distReculFond in rangeReculFond) x
+  (distReculLat in rangeReculLat) x
+  (maximalCES in rangeMaxCES) x
+  (hIniRoad in rangeHIniRoad) x
+  (slopeRoad in rangeSlope) x
+  (hauteurMax in rangeHMax) x
+  (seed in UniformDistribution[Long](42) take 10)) take 5
+)
+
+def modelOutputs = Seq(distReculVoirie, distReculFond ,distReculLat, maximalCES , hIniRoad , slopeRoad ,hauteurMax, seed, energy, coverageRatio, gini,moran,entropy,boxCount,maxHeight,densite)
+
+//val seedExploration = ExplorationTask((seed in UniformDistribution[Long](42) take 10))
+
+val model =
+  ScalaTask("""
+    |val (energy, coverageRatio,gini,moran,entropy,boxCount,maxHeight,densite , outputFolder) =
+    |   simplu3dopenmoleplugin.Simplu3DTask(inputFolder, newDir(), paramFile,  distReculVoirie, distReculFond, distReculLat, maximalCES, hIniRoad, slopeRoad, hauteurMax, seed)
+    |""".stripMargin) set (
+    //om.name := "simplu3dTask"
+    plugins += pluginsOf(Simplu3DTask),
+  //  inputs += (inputFolder, paramFile, idBPU, distReculVoirie, distReculFond, distReculLat, maximalCES, hIniRoad, slopeRoad, hauteurMax, seed),
+    inputs += (
+      inputFolder, 
+      paramFile,  
+      distReculVoirie, 
+      distReculFond, 
+      distReculLat, 
+      maximalCES, 
+      hIniRoad, 
+      slopeRoad, 
+      hauteurMax, 
+      seed),
+    //outputs += (energy, coverageRatio, signature, outputFolder),
+    outputs += outputFolder,
+    outputs += (modelOutputs: _*),
+    
+    //inputFiles += (inputFolder, "/tmp/data_in"),
+    //inputFiles += (paramFile, "/tmp/paramFile.xml"),
+    //outputFiles += ("/tmp/data_out", outputFolder),
+    //idBPU := 255,
+    inputFolder := workDirectory / "data",
+    //paramFile := workDirectory / "building_parameters_project_expthese_temp.xml"
+    paramFile := workDirectory / "recuit_bourrin.xml"
+    
+  )
+
+
+
+//val copyHook = CopyFileHook(outputFolder, workDirectory / "results/shape_${seed}_${energy}_${coverageRatio}_${signature}.csv")
+
+def fileName = modelOutputs.map(v => "${" + v + "}").mkString("_")
+val copyHook = CopyFileHook(outputFolder, workDirectory / ("results/run_" + fileName + ".csv"))
+
+val csvHook = AppendToCSVFileHook(workDirectory / "results/energy.csv", modelOutputs: _*)
+
+val env = LocalEnvironment(4)
+
+explo -< (Strain(model) on env hook csvHook hook copyHook)
+
+
+
