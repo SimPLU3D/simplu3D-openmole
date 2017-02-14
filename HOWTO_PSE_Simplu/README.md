@@ -262,6 +262,21 @@ Le hook qui sauve les résultats dans le fichier est accroché à la tâche `evo
 # Étape  2 Réplication et génération des configuration résultats
 
 
+## Pourquoi répliquer ? 
+
+
+TODO 
+
+prérequis de la méthode en cas de stochasticité
+
+
+
+
+
+
+
+
+
 ## Générer des fichiers SHP 
 
 A l'époque de la première exploration PSE entreprise avec SIMPLU il n'était pas possible d'obtenir directement le fichier SHP correspondant à la configuration bâtie que SIMPLU générait (problème de packaging du code, résolu depuis par Imran).
@@ -278,7 +293,7 @@ TODO insérer script csvsampling
 
 On peut alors appeler SIMPLU sur chacune des lignes du fichier `populationXXXXX.csv` et récupérer les fichiers SHP.
 
-# Matcher fichiers SHP et resultats PSE pour afficher. 
+# Etape 3 Matcher fichiers SHP et resultats PSE pour visualiser. 
 
 
 La première étape du workflow a produit le fichier `populationXXXXX.csv` qui liste les configurations obtenues.
@@ -298,14 +313,14 @@ Si la seconde étape ne génère pas les configurations des lignes du fichier `p
 Pour fonctionner, le code des fichiers `server.R` et `client.R` du repository `simplu3D-openmole/visuPSE/`
 (branche results_pse)  a besoin de deux éléments : 
 - un répertoire qui contient les fichiers SHP (et autres .dbf, .shx et .prj .fix ) de chacune des lignes du fichier `populationXXXXX.csv`
-- le fichier `populationXXXXX.csv` produit par PSE .
-- le fichier `energy.csv` produit par SIMPLU.
+- le fichier `populationXXXXX.csv` produit par PSE.
+- le fichier `energy.csv` produit par SIMPLU après la génération de .
 
 
-## Matching 
+## Détail : matching des données PSE / bâtiments générés. 
 
 
-le matching se fait de façon très simple en concaténant les valeurs des colonnes que les deux fichiers csv ont en commun.
+Le matching se fait de façon très simple en concaténant les valeurs des colonnes que les deux fichiers csv ont en commun.
 
 On se retrouve avec deux tableaux (dataframes) de données. L'un provient de PSE (`dfpse`) l'autre provient de la générations avec SIMPLU des configurations découvertes par PSE (`dfsimu`)
 
