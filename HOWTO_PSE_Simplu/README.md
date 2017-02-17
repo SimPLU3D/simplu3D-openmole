@@ -415,21 +415,8 @@ dfpse$shpPath <- paste("PSEshp/run_",(dfsimu$seed[idxSimu]),"out.shp", sep="")
 
 L'étape 2 de réplications des configurations que PSE sert à deux choses :
 
-- vérifier l'effet de la stochasticité de SIMPLU
-- "rattraper"  le fait que PSE, initialement, doit évaluer 100 (nombre arbitraire) fois chaque point de l'espace image, et aurait besoin pour cela d'un énorme temps de calcul, lorsque le paramétrage du recuit est le plus fin.
-
-
-En jouant sur cette étape 2 , on peut transformer le workflow de deux façons différentes
-
-## Economiser la réplication
-
-Si on a de bonnes raisons de penser que SIMPLU, pour un jeu de paramètres `p` et un  îlot urbain `i`  ne dévie pas beaucoup qualitativement (volume, hauteur, etc..), ces réplications peuvent être court-circuitées (ou fortement réduites) (ou exécutées avec un paramétrage plus bourrin)
-
-A la rigueur, dans un cas extrème , on peut se contenter de générer une seule configuration par ligne du fichier `populationXXXXX.csv`.
-
-Il faudra se rappeler qu'il y aura toujours un risque que SIMPLU génère une configuration différente de celle qu'on observe à l'écran.
-
-Un bon moyen de s'autoriser ce court-circuit est de faire une petite étude exploratoire (avec le script d'exploration) préliminaire et d'observer la distribution des mesures.
+- vérifier/estimer l'effet de la stochasticité de SIMPLU
+- "rattraper"  le fait que PSE, initialement, doit évaluer 100 (nombre arbitraire) fois chaque point de l'espace image, et aurait besoin pour cela d'un énorme temps de calcul, lorsque le paramétrage du recuit est le plus fin. On ne va pas le faire pour tous les points, mais on pourrait le faire pour une partie.
 
 ## Répliquer certaines des configurations sur grille pour gagner en confiance sur les résultats
 
@@ -453,3 +440,5 @@ Pour le dire plus simplement , en répliquant n fois, on obtient n configuration
 
 # Mesures additionnelles
 Je mets ici toutes les notes que j'ai prises sur les mesures , pour avoir une trace lorsque je reprendrai l'implémentation.
+
+TODO mettre le code java + ref de l'article indice gini moran 2005
