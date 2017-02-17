@@ -118,7 +118,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -127,7 +127,8 @@
      inkscape:groupmode="layer"
      id="layer1">
     <g
-       id="g6643">
+       id="g6643"
+       transform="matrix(0.72551194,0,0,0.72551194,51.685036,216.84696)">
       <rect
          ry="1.4285901"
          y="-0.49493814"
@@ -714,7 +715,7 @@
          inkscape:connector-curvature="0"
          id="path18737"
          d="m 325.12195,224.69941 0,65.60102 -28.68064,0 43.25863,41.35716 40.40643,-42.3079 -27.25453,0 0,-64.65028"
-         style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none" />
+         style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
     </g>
   </g>
 </svg>

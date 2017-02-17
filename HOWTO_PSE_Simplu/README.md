@@ -1,9 +1,19 @@
+---
+title: PSE et SimPLU
+output: 
+  html_document: 
+    keep_md: yes
+    number_sections: yes
+    theme: spacelab
+    toc: yes
+---
 
-# PSE et SimPLU
 
 
 
-## Pré requis
+
+
+# Pré requis
 
 - Une version fonctionnelle d'openMole avec les credentials pour taper dans la grille EGI .
 
@@ -40,16 +50,22 @@ Le processus se découpe en trois étapes
 
 
 
-## Étape 1 : PSE
+# Étape 1: PSE
 
 PSE est une méthode qui cherche des points dans un espace de sortie (outputs) en maximisant le nombre et la diversité de ces points.
 Pour chaque point (i.e. combinaison d'outputs) trouvé, on dispose des paramètres (inputs) qui ont mené à ce point.
 L'ensemble de ces points est mis dans un fichier csv `populationXXXXX.csv` où XXXX représente l'itération de la méthode.
 
-C'est une méthode open-ended, elle s'arrête après un certain nombre d'itération donné en paramètre.
+C'est une méthode open-ended, elle s'arrête après un certain nombre d'itération donné en paramètre (ici 400000).
+
+<div style="width:100%;">
+![](Etape1_PSE.svg)
+</div>
 
 
-### Explication du script openMOLE de PSE
+
+
+## Explication du script openMOLE de PSE
 
 Le script openMOLE se trouve dans le fichier  `pse_Simplu.oms`
 
@@ -131,10 +147,10 @@ val model =
 Ici , On déclare :
 
 - la tâche elle-même : Simplu3DTask
-- les inputs **du point de vue de SimPLU** : un repertoire où lire les entrées, un fichier de paramètre xml pour l'algo de recuit, et les paramètres des règles.
+- les inputs **du point de vue de SimPLU** : un repertoire où lire les entrées, un fichier de zone/parcelle et un fichier de paramètre xml pour l'algo de recuit, et les paramètres des règles. 
 - les outputs **du point de vu d'openMOLE**, définis plus haut : c'est ce qu'openMOLE récupère d'une exécution du modèle.
-- les répertoires d'input  et d'output sur la machine sur laquelle on a lancé openMOLE
-- le fichier de paramètres du recuit : `recuit_normal.xml`
+- les répertoires d'input  et d'output sur la machine sur laquelle on a lancé openMOLE (ici le serveur zebulon de l'ISC) ON trouve les fichier `.shp` de la parcelle dans l'inputFolder. L'outputFolder devrait normalement s'appeller `pse` et se trouver dans le workingdirectory (à confirmer)
+- le fichier de paramètres du recuit : `recuit_normal.xml` se trouve au niveau du workingDirectory
 
 
 `Simplu3DTask` est un petit bout de code scala (trouvable sur le repository `simplu3D-openmole/src/main/scala/simplu3dopenmoleplugin/Simplu3DTask.scala`)
@@ -154,10 +170,10 @@ object Simplu3DTask {
   }
 ```
 
-Le résultat de cette tâche est celui de la fonction `run2` qui se trouve dans le repository `simplu3D/src/main/java/fr/ign/cogit/simplu3d/experiments/openmole/RunTask.java`
+Le résultat de cette tâche est celui de la fonction `run2` dont le code se trouve dans le repository `simplu3D/src/main/java/fr/ign/cogit/simplu3d/experiments/openmole/RunTask.java`
 (branche `refactoring reader`)
 
-C'est là qu'on décrit la véritable interface entre la tâche openMOLE et SIMPLU
+C'est là qu'on décrit la véritable interface entre la tâche openMOLE et SIMPLU. Tout changement de proptotype de la fonction côté SimPLU  (dans RunTask.java)  par exemple pour ajouter ou retrancher une sortie doit être propagée en éditant le fichier Simplu3DTask.
 
 ### Entrées / Sorties côté SIMPLU 
 
@@ -190,7 +206,7 @@ Le code se trouve dans la classe RunTask qui se trouve dans la branche `refactor
 `/simplu3D/src/main/java/fr/ign/cogit/simplu3d/experiments/openmole/RunTask.java`
 
 
-Si on voulait ajouter des mesures à la sortie de Simplu, il faudrait modifier cette fonction pour y ajouter/retrancher des mesures, regénérer le plugin simplu3D, le recharger dans openMOLE et relancer l'exploration.
+Si on voulait ajouter des mesures à la sortie de Simplu, il faudrait modifier cette fonction, regénérer le plugin simplu3D, le recharger dans openMOLE et relancer l'exploration.
 
 
 
@@ -227,10 +243,12 @@ val evolution =
 
  `genome` est la liste des entrées que PSE va faire varier lorsqu'il cherche à maximiser la diversité des sorties. 
 
-`objective` est la liste des dimensions  qui forment l'espace que PSE doit couvrir au mieux.
+`objective` est la liste des dimensions  qui forment l'espace que PSE doit couvrir au mieux (les mesures de l'espace de mesures).
 
 La tâche `evolution` est la tâche d'exploration de PSE. C'est une tâche d'un type spécifique ( SteadyStateEvolution) : il s'agit d'exécuter 400000 fois la méthode pse, en demandant de soumettre l'exécution de SIMPLU à 4000 nœuds sur la grille.
-Ce qui fait office de méthode d'évaluation est la tâche `model` elle-même (ses sorties).
+A chaque itération de la méthode, un fichier populationXXXX.csv est généré. On ne considère que le plus récent de ces fichiers, les autres sont des résultats intermédiaires moins intéressants à explorer puisque la diversité n'a pas encore été explorée au maximum.
+
+Ici, ce qui fait office de méthode d'évaluation est la tâche `model` elle-même (ses sorties).
 
 
 
@@ -256,25 +274,55 @@ Le hook qui sauve les résultats dans le fichier est accroché à la tâche `evo
 (evolution hook savePopulationHook on env)
 ```
 
-### Format des résultats de PSE
 
 
-# Étape  2 Réplication et génération des configuration résultats
+
+# Étape 2: Réplication et génération des configuration résultats
+
+
+<div style="width:100%;">
+![](Etape2_CSVSampling.svg)
+</div>
+
+
+
 
 
 ## Pourquoi répliquer ? 
 
+Si SimPLU n'est pas déterministe, il est possible que pour un jeu de paramètres donné en entrée , des configurations différentes peuvent être produites d'une éxécution à l'autre. 
 
-TODO 
-
-prérequis de la méthode en cas de stochasticité
-
+Expérimentalement , ça arrive. J'ai fait des tests de replications pour observer la distributions des valeurs de mesures, et regarder si la déviation/variance n'était pas trop importante. Dans le cas que j'ai testé, j'ai trouvé que ça pouvait aller (c'est pas très scientifique mais bon), mais l'étude de cette variance est un défi en soi : dans quelles conditions simPLU produit des résultats susceptibles de dévier significativement d'une réplication à l'autre ? 
 
 
+Dans les lignes du fichier résultats de PSE, les valeurs des sorties **sont en fait la valeur médiane des mesures** calculée sur le nombre d'évaluation de la configuration.
+
+Une ligne du fichier de PSE = un couple (image, antécédent)  = un paramétrage `p` et des valeurs de mesures `m` et un nombre `s`  (la colonne s'intitule generation$samples) qui indique le nombre de fois que le paramétrage `p` a été simulé.
+
+
+`m` est la médiane des mesures, calculée sur la population de taille `s`, et mise à jour à chaque itération de la méthode (donc les valeurs changent dans chaque fichier `populationXXXX.csv`)
+
+
+Dans le cas général de l'application de la méthode PSE, il ne faudrait considérer parmmis les lignes du fichiers résultat, que les points (donc les lignes) dont le nombre d'évalulation (`s`) soit significatif (arbitrairement 100, en fenètre glissante : les 100 derniers points trouvés pour la ligne courrante).
+Ceci de façon à ce que la médiane soit un bon estimateur de la valeurs des mesures sur les configurations que produit le paramétrage  `p`.
+
+
+**Je n'ai pas filtré les resultats de PSE** selon cette règle. Dans notre cas, la confiance dans la configuration obtenue n'était pas primordiale, par rapport au besoin d'exhiber des configurations variées.
+PSE discrétise l'espace de sortie, pour nous il est plus important de remplir les cases de l'espace de mesures discrétisé et de comparer les configurations (des cases) les unes aux autres , que de déterminer si un point devrait se trouver dans une case plutôt que dans celle d'à côté.
+
+
+Il ne s'agit pas d'oublier de répliquer, mais de reporter cette réplication nécessaire, lorsqu'on se concentrera sur une ou deux configurations (point resultat), où là il faudra bien regarder si la stochasticité de SimPLU pose problème et comment le gérer.
 
 
 
 
+## Il faut de toute façon répliquer (au moins une fois)
+
+Rappel : à l'époque de l'expérimentation , on n'arrivait pas à obtenir la génération des fichiers .SHP lors de l'éxécution sur grille. 
+
+On devait donc répliquer la simulation pour chaque ligne du résultat de PSE en local pour obtenir les fichiers SHP. 
+
+Rien n'empèche de répliquer pluseirus fois la générations, de façon à obtenir , pour chaque point de l'espace de mesures plusieurs configurations (dont les mesures seront proches -pour autant que la médiane soit un bon estimateur- de la valeur trouvée par PSE)
 
 
 ## Générer des fichiers SHP 
@@ -288,12 +336,16 @@ Il faut donc re-générer les fichiers SHP à partir des paramètres d'entrée d
 
 C'est ce que fait le script suivant , avec un `CSVSampling`, qui est une tâche openMOLE spécialement conçue pour échantillonner les lignes d'un fichier. 
 
+## Script de réplication
+
+N.B. Ce script était utilisé **localement**, sur ma machine fixe de l'IGN, car cette étape prenait moins un temps raisonnable (un week end maximum). Il faudrait un peu le modifier pour l'éxécuter sur la grille aussi, de façon à tout faire en distribué et tout récupérer à la fin (idéalement) pour visualiser.
+
 TODO insérer script csvsampling 
 
 
-On peut alors appeler SIMPLU sur chacune des lignes du fichier `populationXXXXX.csv` et récupérer les fichiers SHP.
+Le script appelle SIMPLU sur chacune des lignes du fichier `populationXXXXX.csv` et place récupère les fichiers SHP dans un repertoire.
 
-# Etape 3 Matcher fichiers SHP et resultats PSE pour visualiser. 
+# Etape 3: Matcher fichiers SHP et resultats PSE et visualiser. 
 
 
 La première étape du workflow a produit le fichier `populationXXXXX.csv` qui liste les configurations obtenues.
@@ -381,17 +433,19 @@ Un bon moyen de s'autoriser ce court-circuit est de faire une petite étude expl
 
 ## Répliquer certaines des configurations sur grille pour gagner en confiance sur les résultats
 
-Ce workflow alternatif n'a PAS ETE FAIT , mais il ne manque pas grand chose pour l'obtenir : un peu de code Scala à intercaler dans le fichier `.oms`
+Ce workflow alternatif n'a pas été implémenté , mais il ne manque pas grand chose pour l'obtenir : un peu de code Scala à intercaler dans le fichier `.oms`
 
 
 Après PSE , selectionner dans le fichier `populationXXXXX.csv` un sous ensemble de configurations (des lignes du fichier) => Un peu de code scala est necessaire pour filtrer ces lignes suivant le critère retenu.
 
-Pour ces lignes, extraire les jeu de paramètres, et lancer une exploration qui réplique l'exécution de SIMPLU pour ces valeurs de paramètres.
+Pour ces lignes, extraire les jeu de paramètres, et lancer une exploration qui réplique l'exécution de SIMPLU pour ces valeurs de paramètres (en changeant seulement la seed d'une éxécution à l'autre).
 
 Observer les déviations des mesures  (un peu de code scala est nécessaire pour calculer les stats sur les mesures) par exemple à l'aide de quantiles et d'un seuil.
 
 
+On obtient alors un sous ensemble de résultats de type PSE (les points dans l'espace de mesures), mais pour lesquels on disposera de plusieurs configurations pour chaque point découvert par PSE, configurations qui justifieront intégralement la valeur des mesures qui définissent le point résultat.
 
+Pour le dire plus simplement , en répliquant n fois, on obtient n configurations par point.
 
 
 
