@@ -441,4 +441,28 @@ Pour le dire plus simplement , en répliquant n fois, on obtient n configuration
 # Mesures additionnelles
 Je mets ici toutes les notes que j'ai prises sur les mesures , pour avoir une trace lorsque je reprendrai l'implémentation.
 
-TODO mettre le code java + ref de l'article indice gini moran 2005
+TODO mettre le code java + ref de l'article indice gini moran Tsaï 2005
+
+- Aire de contact entre les bâtiments (Aire verticale)
+
+- Entropie bâtiment (Shannon sur les dimensions)
+
+- Hoover 
+
+- transformée Fourier du signal des hauteurs de façades ()
+
+- Moran circulaire
+
+
+
+# truc à faire pour voir 
+
+
+- log du temps d'exécutions et du nombre de pas du TDSA
+
+
+
+# code additionel
+
+
+## Visualiser les distribution de mesures pour des réplications
