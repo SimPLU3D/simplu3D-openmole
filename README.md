@@ -44,7 +44,7 @@ Other outputs are dimensions and coordinates of the cubes constituting the build
 
 ## Input space
 
-The input space is constituted of 7 parameters:
+In this experiments, the input space is constituted of 7 parameters:
 
 + distReculVoirie: the distance between buildings of a parcel and the road (street)
 + distReculFond: the distance between buildings of a parcel and the bottom of the parcel
@@ -54,9 +54,7 @@ The input space is constituted of 7 parameters:
 + slopeRoad : the angle of the line between the top of the roof and the plane at hIniRoad (see figure below)
 + hauteurMax : the maximal height of the building
 
-
 ![imputparameters](./readme_images/schema_param_input.png)
-
 
 
 An other implicit input is the seed used for the random number generator of SimPLU.
@@ -67,12 +65,12 @@ An other implicit input is the seed used for the random number generator of SimP
 
 ### Desired properties of measures
 
-Various measures are available to qualify the output of a simulation run; PSE method accepts any kind of measures (discrete continuous). The ideal measures for PSE should be : 
+Various measures are available to qualify the output of a simulation run; PSE method accepts any kind of measures (discrete or continuous). The ideal measures for PSE should be : 
 
-+ discriminative regarding the possible output patterns (we are looking for variety)
-+ as independent as possible of each other 
-+ easily interpretable 
-+ sound regarding the thematic domain (here, a mix between urbanism and soil occupation)
++ discriminative regarding the possible output patterns (we are looking for variety) ;
++ as independent as possible of each other ;
++ easily interpretable  ;
++ sound regarding the thematic domain (here, a mix between urbanism and soil occupation).
  
 
 
@@ -81,11 +79,11 @@ Various measures are available to qualify the output of a simulation run; PSE me
 
 + Gini index ; inequality in buildings' volume distribution
 + Moran's I :  spatial autocorrelation of volume among parcels of the zone
-+ number of box : number of boxes constituting buildings , a rough proxy towards configuration visual complexity
-+ coverage ratio : built surface ratio  (built surface / total surface)
-+ floor density : like traditional density but taking surface of additional floors of buildings into account
-+ profile Moran's I : *ad hoc* measure based on repartition of heights of buildings along the road that delineates the zone. 
-+ energy: a quantity homogeneous to volume of the building
++ Number of box : number of boxes constituting buildings , a rough proxy towards configuration visual complexity
++ Coverage ratio : built surface ratio  (built surface / total surface)
++ Floor density : like traditional density but taking surface of additional floors of buildings into account
++ Moran's profile  I : *ad hoc* measure based on repartition of heights of buildings along the road that delineates the zone. 
++ Energy: a quantity homogeneous to volume of the building
 
 
 Moran's I has variants depending on the interaction term between two parcels : current version features euclidean distance between parcel centroids, but one could also imagine alternatives where the distance is taken from building centroids to centroid of the zone, or distance as a number of adjacent neighbors. 
@@ -108,8 +106,6 @@ Moran's I has variants depending on the interaction term between two parcels : c
 The energy file is a `.csv` file produced by one execution of Simplu.
 It contains several columns : inputparameters first , measures next
 All are made of type double values if not precised otherwise
-
-
 
 Input parameters
 + distReculVoirie
@@ -136,7 +132,7 @@ Ouputs
 #### PSE results file 
 Usually named populatioXXXXX.csv with XXXX the number of the PSE method iterations.
 
-The format differ little from the Simplu results files.
+The format differs a little from the Simplu results files.
 
 First column `evolution$generation` is useless for analysis purpose, as it just contains the current iteration number of the method.
 
