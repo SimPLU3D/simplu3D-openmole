@@ -2,8 +2,10 @@
 
 ## Content of this branch 
 
-+ This readme file that provides an introduction on PSE exploration applied to SimPLU 
++ This readme file that provides an introduction on PSE exploration applied to SimPLU
++ OpenMole and additionnal scripts to run PSE Method [More information](https://github.com/IGNF/simplu3D-openmole/blob/results_pse/HOWTO_PSE_Simplu/README.md)
 + R scripts to analyze results of PSE method
++ R script to visualize the results [More information](https://github.com/IGNF/simplu3D-openmole/tree/results_pse/visuPSE)
 + Instructions to batch-generate shapefiles corresponding to some results' configurations  
 + Some results 
 
