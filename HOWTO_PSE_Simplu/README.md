@@ -59,7 +59,7 @@ L'ensemble de ces points est mis dans un fichier csv `populationXXXXX.csv` où X
 C'est une méthode open-ended, elle s'arrête après un certain nombre d'itération donné en paramètre (ici 400000).
 
 <div style="width:100%;">
-![](https://rawgit.com/IGNF/simplu3D-openmole/results_pse/HOWTO_PSE_Simplu/Etape1_PSE.svg)
+<img src="https://rawgit.com/IGNF/simplu3D-openmole/results_pse/HOWTO_PSE_Simplu/Etape1_PSE.svg" />
 </div>
 
 
@@ -280,8 +280,10 @@ Le hook qui sauve les résultats dans le fichier est accroché à la tâche `evo
 # Étape 2: Réplication et génération des configuration résultats
 
 
+
+
 <div style="width:100%;">
-![](Etape2_CSVSampling.svg)
+<img src="https://rawgit.com/IGNF/simplu3D-openmole/results_pse/HOWTO_PSE_Simplu/Etape2_CSVSampling.svg" />
 </div>
 
 
