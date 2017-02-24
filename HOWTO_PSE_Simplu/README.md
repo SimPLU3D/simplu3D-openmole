@@ -58,9 +58,8 @@ L'ensemble de ces points est mis dans un fichier csv `populationXXXXX.csv` où X
 
 C'est une méthode open-ended, elle s'arrête après un certain nombre d'itération donné en paramètre (ici 400000).
 
-<div style="width:100%;">
 <img src="https://rawgit.com/IGNF/simplu3D-openmole/results_pse/HOWTO_PSE_Simplu/Etape1_PSE.svg" />
-</div>
+
 
 
 
