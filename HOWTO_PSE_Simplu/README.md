@@ -278,16 +278,7 @@ Le hook qui sauve les résultats dans le fichier est accroché à la tâche `evo
 
 
 # Étape 2: Réplication et génération des configuration résultats
-
-
-
-
-<div style="width:100%;">
 <img src="https://rawgit.com/IGNF/simplu3D-openmole/results_pse/HOWTO_PSE_Simplu/Etape2_CSVSampling.svg" />
-</div>
-
-
-
 
 
 ## Pourquoi répliquer ? 
@@ -348,6 +339,7 @@ TODO insérer script csvsampling
 Le script appelle SIMPLU sur chacune des lignes du fichier `populationXXXXX.csv` et place récupère les fichiers SHP dans un repertoire.
 
 # Etape 3: Matcher fichiers SHP et resultats PSE et visualiser. 
+<img src="https://rawgit.com/IGNF/simplu3D-openmole/results_pse/HOWTO_PSE_Simplu/Etape3_MatchingVizu.svg" />
 
 
 La première étape du workflow a produit le fichier `populationXXXXX.csv` qui liste les configurations obtenues.
@@ -357,10 +349,6 @@ La seconde étape du workflow produit à partir de ce fichier des fichiers SHP p
 Si la seconde étape ne génère pas les configurations des lignes du fichier `populationXXXXX.csv` dans l'ordre **exact** des lignes, il faudra faire une mise en correspondance entre les paramètres d'entrée et les fichiers SHP générés.
 
 (Si on imagine qu'on délègue également la génération de fichiers SHP à OpenMOLE, il faut imaginer aussi qu'on recevra les configurations dans le désordre, et il faudra de toute façon gérer ce matching à posteriori)
-
-
-
-
 
 ## Utilisation du code de visualisation des résultats.
 
@@ -457,14 +445,14 @@ TODO mettre le code java + ref de l'article indice gini moran Tsaï 2005
 
 
 
-# truc à faire pour voir 
+# Truc à faire pour voir 
 
 
 - log du temps d'exécutions et du nombre de pas du TDSA
 
 
 
-# code additionel
+# Code additionel
 
 
 ## Visualiser les distribution de mesures pour des réplications
