@@ -25,16 +25,10 @@ dfpse<- dfpse[,2:12]
 
 dfsimu <- read.csv("energy.csv", header = T, colClasses = c("seed"="character"))
 
-
-
-
-
-
 # noms des dimensions à afficher dans le nuage de points 3D 
 colsPointInteret <- c("gini", "moran", "densite", "coverageRatio")
 # label des points min et max des colonnes ci dessus 
 labelPointsInteret <- c("minGini", "minMoran", "minDensite", "minCoverage", "maxGini", "maxMoran", "maxDensite", "maxCoverage")
-
 
 
 colsEnCommun <- intersect(names(dfsimu), names(dfpse))
@@ -71,11 +65,11 @@ dfpse$shpPath <- paste("PSEshp/run_",(dfsimu$seed[idxSimu]),"out.shp", sep="")
 
 
 
+#some of the shp are missing , remove them see the warning messages
+dfpse <- dfpse[-c(3,1020,1344,3200),]
 
 dfpse$shpPath <- normalizePath(dfpse$shpPath)
 dfpse$moranProfile <- dfsimu$moranProfile[idxSimu]
-
-
 
 
 
