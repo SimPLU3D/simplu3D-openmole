@@ -53,7 +53,7 @@ matchingPSESimu <- function(hash){
 idxSimu <- matchingPSESimu(lignesPSE$hash)
 
 #pour vérifier qu'on a  bien les bons index
-#all(dfsimu[idxSimu,colsEnCommun]==dfpse[,colsEnCommun]) # doit valoir TRUE
+all(dfsimu[idxSimu,colsEnCommun]==dfpse[,colsEnCommun]) # doit valoir TRUE
 
 # on cree un attribut "shpPath" dans le dataframePSE (NB : pas de .shp car maptools)
 
@@ -65,13 +65,12 @@ dfpse$shpPath <- paste("PSEshp/run_",(dfsimu$seed[idxSimu]),"out.shp", sep="")
 
 
 
-#some of the shp are missing , remove them see the warning messages
-dfpse <- dfpse[-c(3,1020,1344,3200),]
+#sil manque les shp des lignes (3,1020,1344,3200
 
-dfpse$shpPath <- normalizePath(dfpse$shpPath)
+
 dfpse$moranProfile <- dfsimu$moranProfile[idxSimu]
-
-
+dfpse <- dfpse[-c(3,1020,1344,3200),]
+dfpse$shpPath <- normalizePath(dfpse$shpPath)
 
 minis <- apply(dfpse[,1:7],MARGIN = 2,min)
 maxis <- apply(dfpse[,1:7],MARGIN = 2,max)
@@ -81,7 +80,7 @@ bornes <- data.frame(noms, minis, maxis)
 
 
 # pour ne pas toujours lire le fichier de parcelle
-zone <- readShapePoly("parcelle")
+zone <- rgdal::readOGR("parcelle.shp")
 #hauteur max pour couleur des batiments dans le plot SHP
 maxHaut <- max(dfpse$hauteurMax)
 
@@ -99,6 +98,10 @@ interpolColor <- function(vect){
   return(palette[idxcol])
 }
 
+fonfont <- list(
+  family = "sans serif",
+  size = 12,
+  color = 'black')
 
 
 
@@ -106,7 +109,7 @@ interpolColor <- function(vect){
 
 
 shinyServer(function(input, output) {
-  
+  options(warn = -1)
   subsetdfpse <- reactive({
     currentdfpse <- sample_n(dfpse, size = input$nbpoints)
     currentdfpse[
@@ -174,7 +177,7 @@ shinyServer(function(input, output) {
      png(outfile, width=400, height=400)
      plot(zone,col="gray95")
      
-    config <- readShapePoly(subsetdfpse[(evd$pointNumber+1),12])
+    config <- suppressWarnings(readShapePoly(subsetdfpse[(evd$pointNumber+1),12]))
     config$idx <-round(rescale(config$Hauteur,from=c(0,maxHaut),to=c(0,100)))
     config$col <- sapply(config$idx, FUN = getElement,object=palette(100))
     
