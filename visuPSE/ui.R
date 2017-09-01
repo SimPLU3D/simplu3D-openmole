@@ -16,7 +16,7 @@ library(plotly)
 shinyUI(
   fluidPage(
     # Application title
-    titlePanel("PSE results exploration"),
+    titlePanel("SimPLU3D PSE results exploration"),
     
     sidebarLayout(
       sidebarPanel(
