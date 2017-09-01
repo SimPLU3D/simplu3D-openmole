@@ -109,7 +109,7 @@ fonfont <- list(
 
 
 shinyServer(function(input, output) {
-  options(warn = -1)
+
   subsetdfpse <- reactive({
     currentdfpse <- sample_n(dfpse, size = input$nbpoints)
     currentdfpse[
