@@ -1,0 +1,89 @@
+import simplu3dopenmoleplugin._
+
+val inputFolder = Val[File]
+val paramFile = Val[File]
+val outputFolder = Val[File]
+
+val distReculVoirie = Val[Double]
+val distReculFond = Val[Double]
+val distReculLat = Val[Double]
+val maximalCES = Val[Double]
+val hIniRoad = Val[Double]
+val slopeRoad = Val[Double]
+val hauteurMax = Val[Double]
+val seed = Val[Long]
+
+val energy = Val[Double]
+val coverageRatio = Val[Double]
+val gini = Val[Double]
+val moran = Val[Double]
+val entropy = Val[Double]
+val boxCount = Val[Double]
+val maxHeight = Val[Double]
+val densite = Val[Double]
+
+def modelOutputs = Seq(distReculVoirie, distReculFond ,distReculLat, maximalCES , hIniRoad , slopeRoad ,hauteurMax, seed, energy, coverageRatio, gini,moran,entropy,boxCount,maxHeight,densite)
+
+val model =
+  ScalaTask("""
+    |val (energy, coverageRatio,gini,moran,entropy,boxCount,maxHeight,densite , outputFolder) =
+    |   simplu3dopenmoleplugin.Simplu3DTask(inputFolder, newDir(), paramFile,  distReculVoirie, distReculFond, distReculLat, maximalCES, hIniRoad, slopeRoad, hauteurMax, seed)
+    |""".stripMargin) set (
+    plugins += pluginsOf(Simplu3DTask),
+    inputs += (
+      inputFolder, 
+      paramFile,  
+      distReculVoirie, 
+      distReculFond, 
+      distReculLat, 
+      maximalCES, 
+      hIniRoad, 
+      slopeRoad, 
+      hauteurMax, 
+      seed),
+    outputs += outputFolder,
+    outputs += (modelOutputs: _*),
+    inputFolder := workDirectory / "data",
+    paramFile := workDirectory / "recuit_normal.xml"
+  )
+
+val pse =
+  PSE(
+    genome = Seq(
+      distReculVoirie in (0.0, 10.0),
+      distReculFond in (0.0, 10.0),
+      distReculLat in (0.0, 5.0),
+      maximalCES in (0.3, 1.0),
+      hIniRoad in (0.0, 15.0),
+      slopeRoad in (0.5, 3.0),
+      hauteurMax in (6.0, 24.0)),
+    objectives =  Seq(
+      gini in (0.0 to 1.0 by 0.1), 
+      moran in (-0.2 to 0.5 by 0.01),
+      densite in (1.0 to 8.0 by 0.2   ),
+      coverageRatio in ( 0.0 to 1.0 by 0.1)  
+      ),
+    replication = Replication(seed = seed)
+ )
+ 
+val evolution =
+  SteadyStateEvolution(
+    algorithm = pse,
+    evaluation = model,
+    parallelism = 4000,
+    termination = 400000
+  )
+
+val env = EGIEnvironment("vo.complex-systems.eu")
+
+
+// Define a hook to save the Pareto frontier
+val savePopulationHook = SavePopulationHook(evolution, workDirectory / "pse")
+
+// Plug everything together to create the workflow
+(evolution hook savePopulationHook on env)
+
+
+
+
+
