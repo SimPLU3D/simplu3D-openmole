@@ -1,0 +1,288 @@
+{
+  "CTRL": {
+    "comboBox_Controls": "OrbitControls.js"
+  }, 
+  "DEM": {
+    "checkBox_Clip": false, 
+    "checkBox_Frame": false, 
+    "checkBox_Shading": true, 
+    "checkBox_Sides": true, 
+    "checkBox_Surroundings": false, 
+    "checkBox_TransparentBackground": false, 
+    "comboBox_ClipLayer": "run_1001794029924535507out20170904113540384", 
+    "comboBox_DEMLayer": 0, 
+    "comboBox_TextureSize": 100, 
+    "horizontalSlider_DEMSize": 2, 
+    "lineEdit_Color": "", 
+    "lineEdit_ImageFile": "", 
+    "lineEdit_centerX": "", 
+    "lineEdit_centerY": "", 
+    "lineEdit_rectHeight": "", 
+    "lineEdit_rectWidth": "", 
+    "radioButton_MapCanvas": true, 
+    "radioButton_Simple": true, 
+    "spinBox_Height": 4, 
+    "spinBox_Roughening": 4, 
+    "spinBox_Size": 5, 
+    "spinBox_demtransp": 0, 
+    "visible": false
+  }, 
+  "OutputFilename": "/home/paul/dev/simplu3D-openmole/scriptQGIS_genThree.js/tutu{0}.html", 
+  "POLYGON": {
+    "run_1001794029924535507out20170904113540384": {
+      "checkBox_Clip": true, 
+      "checkBox_ExportAttrs": false, 
+      "comboBox_Label": null, 
+      "comboBox_ObjectType": 0, 
+      "heightWidget": {
+        "comboData": 2, 
+        "comboText": "Relative to DEM", 
+        "editText": "0", 
+        "type": 4
+      }, 
+      "labelHeightWidget": {
+        "comboData": 3, 
+        "comboText": "Height from top", 
+        "editText": "29.0184874172", 
+        "type": 6
+      }, 
+      "radioButton_IntersectingFeatures": true, 
+      "styleWidget0": {
+        "comboData": 1, 
+        "comboText": "Feature style", 
+        "editText": "", 
+        "type": 2
+      }, 
+      "styleWidget1": {
+        "comboData": 1, 
+        "comboText": "Feature style", 
+        "editText": "", 
+        "type": 5
+      }, 
+      "styleWidget2": {
+        "comboData": 1, 
+        "comboText": "Fixed value", 
+        "editText": "3.48221849007", 
+        "type": 1
+      }, 
+      "styleWidget3": {}, 
+      "styleWidget4": {}, 
+      "styleWidget5": {}, 
+      "visible": true
+    }, 
+    "run_7187488777127931461out20170904113539412": {
+      "checkBox_Clip": true, 
+      "checkBox_ExportAttrs": false, 
+      "comboBox_Label": null, 
+      "comboBox_ObjectType": 0, 
+      "heightWidget": {
+        "comboData": 2, 
+        "comboText": "Relative to DEM", 
+        "editText": "0", 
+        "type": 4
+      }, 
+      "labelHeightWidget": {
+        "comboData": 3, 
+        "comboText": "Height from top", 
+        "editText": "29.0184874172", 
+        "type": 6
+      }, 
+      "radioButton_IntersectingFeatures": true, 
+      "styleWidget0": {
+        "comboData": 1, 
+        "comboText": "Feature style", 
+        "editText": "", 
+        "type": 2
+      }, 
+      "styleWidget1": {
+        "comboData": 1, 
+        "comboText": "Feature style", 
+        "editText": "", 
+        "type": 5
+      }, 
+      "styleWidget2": {
+        "comboData": 1, 
+        "comboText": "Fixed value", 
+        "editText": "3.48221849007", 
+        "type": 1
+      }, 
+      "styleWidget3": {}, 
+      "styleWidget4": {}, 
+      "styleWidget5": {}, 
+      "visible": true
+    }, 
+    "run_984132971187184876out20170904113539905": {
+      "checkBox_Clip": true, 
+      "checkBox_ExportAttrs": false, 
+      "comboBox_Label": null, 
+      "comboBox_ObjectType": 0, 
+      "heightWidget": {
+        "comboData": 2, 
+        "comboText": "Relative to DEM", 
+        "editText": "0", 
+        "type": 4
+      }, 
+      "labelHeightWidget": {
+        "comboData": 3, 
+        "comboText": "Height from top", 
+        "editText": "29.0184874172", 
+        "type": 6
+      }, 
+      "radioButton_IntersectingFeatures": true, 
+      "styleWidget0": {
+        "comboData": 1, 
+        "comboText": "Feature style", 
+        "editText": "", 
+        "type": 2
+      }, 
+      "styleWidget1": {
+        "comboData": 1, 
+        "comboText": "Feature style", 
+        "editText": "", 
+        "type": 5
+      }, 
+      "styleWidget2": {
+        "comboData": 1, 
+        "comboText": "Fixed value", 
+        "editText": "3.48221849007", 
+        "type": 1
+      }, 
+      "styleWidget3": {}, 
+      "styleWidget4": {}, 
+      "styleWidget5": {}, 
+      "visible": true
+    }, 
+    "run_993883125210482494out20170904113539070": {
+      "checkBox_Clip": true, 
+      "checkBox_ExportAttrs": false, 
+      "comboBox_Label": null, 
+      "comboBox_ObjectType": 0, 
+      "heightWidget": {
+        "comboData": 2, 
+        "comboText": "Relative to DEM", 
+        "editText": "0", 
+        "type": 4
+      }, 
+      "labelHeightWidget": {
+        "comboData": 3, 
+        "comboText": "Height from top", 
+        "editText": "29.0184874172", 
+        "type": 6
+      }, 
+      "radioButton_IntersectingFeatures": true, 
+      "styleWidget0": {
+        "comboData": 1, 
+        "comboText": "Feature style", 
+        "editText": "", 
+        "type": 2
+      }, 
+      "styleWidget1": {
+        "comboData": 1, 
+        "comboText": "Feature style", 
+        "editText": "", 
+        "type": 5
+      }, 
+      "styleWidget2": {
+        "comboData": 1, 
+        "comboText": "Fixed value", 
+        "editText": "3.48221849007", 
+        "type": 1
+      }, 
+      "styleWidget3": {}, 
+      "styleWidget4": {}, 
+      "styleWidget5": {}, 
+      "visible": true
+    }, 
+    "run__1001011140043575811out20170904113539660": {
+      "checkBox_Clip": true, 
+      "checkBox_ExportAttrs": false, 
+      "comboBox_Label": null, 
+      "comboBox_ObjectType": 0, 
+      "heightWidget": {
+        "comboData": 2, 
+        "comboText": "Relative to DEM", 
+        "editText": "0", 
+        "type": 4
+      }, 
+      "labelHeightWidget": {
+        "comboData": 3, 
+        "comboText": "Height from top", 
+        "editText": "29.0184874172", 
+        "type": 6
+      }, 
+      "radioButton_IntersectingFeatures": true, 
+      "styleWidget0": {
+        "comboData": 1, 
+        "comboText": "Feature style", 
+        "editText": "", 
+        "type": 2
+      }, 
+      "styleWidget1": {
+        "comboData": 1, 
+        "comboText": "Feature style", 
+        "editText": "", 
+        "type": 5
+      }, 
+      "styleWidget2": {
+        "comboData": 1, 
+        "comboText": "Fixed value", 
+        "editText": "3.48221849007", 
+        "type": 1
+      }, 
+      "styleWidget3": {}, 
+      "styleWidget4": {}, 
+      "styleWidget5": {}, 
+      "visible": true
+    }, 
+    "run__5131706734940644834out20170904113540148": {
+      "checkBox_Clip": true, 
+      "checkBox_ExportAttrs": false, 
+      "comboBox_Label": null, 
+      "comboBox_ObjectType": 0, 
+      "heightWidget": {
+        "comboData": 2, 
+        "comboText": "Relative to DEM", 
+        "editText": "0", 
+        "type": 4
+      }, 
+      "labelHeightWidget": {
+        "comboData": 3, 
+        "comboText": "Height from top", 
+        "editText": "29.0184874172", 
+        "type": 6
+      }, 
+      "radioButton_IntersectingFeatures": true, 
+      "styleWidget0": {
+        "comboData": 1, 
+        "comboText": "Feature style", 
+        "editText": "", 
+        "type": 2
+      }, 
+      "styleWidget1": {
+        "comboData": 1, 
+        "comboText": "Feature style", 
+        "editText": "", 
+        "type": 5
+      }, 
+      "styleWidget2": {
+        "comboData": 1, 
+        "comboText": "Fixed value", 
+        "editText": "3.48221849007", 
+        "type": 1
+      }, 
+      "styleWidget3": {}, 
+      "styleWidget4": {}, 
+      "styleWidget5": {}, 
+      "visible": true
+    }
+  }, 
+  "PluginVersion": "1.4.2", 
+  "Template": "3DViewer.html", 
+  "WORLD": {
+    "lineEdit_BaseSize": "100", 
+    "lineEdit_Color": "", 
+    "lineEdit_zFactor": "1.5", 
+    "lineEdit_zShift": "0", 
+    "radioButton_WGS84": true
+  }
+}

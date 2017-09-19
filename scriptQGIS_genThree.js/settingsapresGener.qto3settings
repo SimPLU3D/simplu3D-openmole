@@ -1,0 +1,41 @@
+{
+  "CTRL": {
+    "comboBox_Controls": "OrbitControls.js"
+  }, 
+  "DEM": {
+    "checkBox_Clip": false, 
+    "checkBox_Frame": false, 
+    "checkBox_Shading": true, 
+    "checkBox_Sides": true, 
+    "checkBox_Surroundings": false, 
+    "checkBox_TransparentBackground": false, 
+    "comboBox_ClipLayer": "run_1001794029924535507out20170904113540384", 
+    "comboBox_DEMLayer": 0, 
+    "comboBox_TextureSize": 100, 
+    "horizontalSlider_DEMSize": 2, 
+    "lineEdit_Color": "", 
+    "lineEdit_ImageFile": "", 
+    "lineEdit_centerX": "", 
+    "lineEdit_centerY": "", 
+    "lineEdit_rectHeight": "", 
+    "lineEdit_rectWidth": "", 
+    "radioButton_MapCanvas": true, 
+    "radioButton_Simple": true, 
+    "spinBox_Height": 4, 
+    "spinBox_Roughening": 4, 
+    "spinBox_Size": 5, 
+    "spinBox_demtransp": 0, 
+    "visible": false
+  }, 
+  "OutputFilename": "/home/paul/dev/simplu3D-openmole/scriptQGIS_genThree.js/tutu{0}.html", 
+  "POLYGON": {}, 
+  "PluginVersion": "1.4.2", 
+  "Template": "3DViewer.html", 
+  "WORLD": {
+    "lineEdit_BaseSize": "100", 
+    "lineEdit_Color": "", 
+    "lineEdit_zFactor": "1.5", 
+    "lineEdit_zShift": "0", 
+    "radioButton_WGS84": true
+  }
+}

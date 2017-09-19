@@ -1,0 +1,13 @@
+!table
+!version 300
+!charset WindowsLatin1
+
+Definition Table
+File "067-2008-1050-6841-LAMB93.tif"
+Type "RASTER"
+(1050000.00,6841000.00) (0,0) Label "Pt 1",
+(1051000.00,6841000.00) (20000,0) Label "Pt 2",
+(1050000.00,6840000.00) (0,20000) Label "Pt 3",
+(1051000.00,6840000.00) (20000,20000) Label "Pt 4"
+CoordSys Earth Projection 3, 104, "m", 3, 46.5, 44, 49, 700000, 6600000
+Units "m"
