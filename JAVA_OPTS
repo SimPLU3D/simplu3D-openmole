@@ -1,2 +1,2 @@
-export JAVA_OPTS="$JAVA_OPTS -Djavax.net.ssl.trustStore=/home/pchapron/certificats/trust.jks -Djavax.net.ssl.keyStorePassword=chapix -Dhttp.proxyHost=proxy.ign.fr -Dhttp.proxyPort=3128"
+export JAVA_OPTS="$JAVA_OPTS -Djavax.net.ssl.trustStore=/home/pchapron/certificats/trust.jks -Djavax.net.ssl.keyStorePassword=***** -Dhttp.proxyHost=proxy.ign.fr -Dhttp.proxyPort=3128"
 
