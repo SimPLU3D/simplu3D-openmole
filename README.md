@@ -3,10 +3,10 @@
 ## Content of this branch 
 
 + This readme file that provides an introduction on PSE exploration applied to SimPLU
-+ OpenMole and additionnal scripts to run PSE Method [More information](https://github.com/IGNF/simplu3D-openmole/blob/results_pse/HOWTO_PSE_Simplu/README.md)
++ OpenMole and additionnal scripts to run PSE Method [More information](https://github.com/SimPLU3D/simplu3D-openmole/blob/results_pse/HOWTO_PSE_Simplu/README.md)
 + R scripts to analyze results of PSE method
-+ R script to visualize the results [More information](https://github.com/IGNF/simplu3D-openmole/tree/results_pse/visuPSE)
-+ Instructions to batch-generate shapefiles corresponding to some results' configurations  
++ R script to visualize the results [More information](https://github.com/SimPLU3D/simplu3D-openmole/tree/results_pse/visuPSE)
++ Instructions to batch-generate shapefiles corresponding to some results' configurations
 + Some results 
 
 
@@ -32,9 +32,9 @@ The idea of a PSE framework applied on SimPLU is to explore the diversity of bui
 
 
 
-## The SimPLU model
+## The SimPLU3D model
 
-The project is described and available [here](https://github.com/IGNF/simplu3D)
+The project is described and available [here](https://github.com/SimPLU3D/simplu3D)
 
 For the sake of this particular exploration case, we will abstract SimPLU as a machine that transforms inputs parameters into outputs measure.
 
@@ -50,8 +50,8 @@ In this experiments, the input space is constituted of 7 parameters:
 
 + distReculVoirie: the distance between buildings of a parcel and the road (street)
 + distReculFond: the distance between buildings of a parcel and the bottom of the parcel
-+ distReculLat: the distance between buildings of a parcel and the sides of the parcel   
-+ maximalCES: the maximal surface ratio  between buildings surface and parcel surface  
++ distReculLat: the distance between buildings of a parcel and the sides of the parcel
++ maximalCES: the maximal surface ratio  between buildings surface and parcel surface
 + hIniRoad : the height of the wall facing the road (see figure below)
 + slopeRoad : the angle of the line between the top of the roof and the plane at hIniRoad (see figure below)
 + hauteurMax : the maximal height of the building
