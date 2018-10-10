@@ -47,9 +47,9 @@ resolvers += "Hibernate" at "http://www.hibernatespatial.org/repository"
 
 //libraryDependencies += "org.openmole" %% "org-openmole-plugin-task-scala" % openMOLEVersion
 
-val simplu3DVersion = "1.1-SNAPSHOT"
+val simplu3DVersion = "1.2-SNAPSHOT"
 
-libraryDependencies += "fr.ign.cogit" % "simplu3d" % simplu3DVersion excludeAll(
+libraryDependencies += "fr.ign.cogit" % "simplu3d-experiments" % simplu3DVersion excludeAll(
     ExclusionRule(organization = "uk.ac.ed.ph.snuggletex"),
     ExclusionRule(organization = "vigna.dsi.unimi.it"),
     ExclusionRule(organization = "net.billylieurance.azuresearch"),
