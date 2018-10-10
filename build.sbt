@@ -2,17 +2,24 @@ name := "simplu3D-openmole-plugin"
 
 version := "1.0"
 
-scalaVersion := "2.11.6"
+scalaVersion := "2.12.6"
 
-osgiSettings
+javacOptions ++= Seq("-source", "1.8", "-target", "1.8", "-Xlint")
+scalacOptions += "-target:jvm-1.8"
+
+enablePlugins(SbtOsgi)
 
 OsgiKeys.exportPackage := Seq("simplu3dopenmoleplugin.*")
 
 OsgiKeys.importPackage := Seq("*;resolution:=optional")
 
-OsgiKeys.privatePackage := Seq("!scala.*,!java.*,*")
+OsgiKeys.privatePackage := Seq("""
+|!scala.*,!java.*,META-INF.*;-split-package:=merge-first,
+|*;-split-package:=merge-first
+|""".stripMargin)
 
-scalariformSettings
+OsgiKeys.requireCapability := """osgi.ee; osgi.ee="JavaSE";version:List="1.8,1.9"""""
+
 
 resolvers += "IDB" at "http://igetdb.sourceforge.net/maven2-repository/"
 
@@ -49,7 +56,28 @@ resolvers += "Hibernate" at "http://www.hibernatespatial.org/repository"
 
 val simplu3DVersion = "1.2-SNAPSHOT"
 
+val geotoolsGridVersion = "18.4"
+
+libraryDependencies += "org.geotools" % "gt-grid" % geotoolsGridVersion
+libraryDependencies += "org.geotools" % "gt-coverage" % geotoolsGridVersion
+libraryDependencies += "org.geotools" % "gt-geotiff" % geotoolsGridVersion
+libraryDependencies += "org.geotools" % "gt-image" % geotoolsGridVersion
+//
+libraryDependencies += "org.geotools" % "gt-referencing" % geotoolsGridVersion
+libraryDependencies += "org.geotools" % "gt-epsg-hsql" % geotoolsGridVersion
+//libraryDependencies += "org.geotools" % "gt-epsg-extension" % geotoolsGridVersion
+libraryDependencies += "org.geotools" % "gt-shapefile" % geotoolsGridVersion
+libraryDependencies += "org.geotools" % "gt-graph" % geotoolsGridVersion
+//
+libraryDependencies += "org.geotools" % "gt-metadata" % geotoolsGridVersion
+libraryDependencies += "org.geotools" % "gt-opengis" % geotoolsGridVersion
+libraryDependencies += "org.geotools" % "gt-main" % geotoolsGridVersion
+libraryDependencies += "org.geotools" % "gt-api" % geotoolsGridVersion
+
+
+
 libraryDependencies += "fr.ign.cogit" % "simplu3d-experiments" % simplu3DVersion excludeAll(
+    ExclusionRule(organization = "org.geotools"),
     ExclusionRule(organization = "uk.ac.ed.ph.snuggletex"),
     ExclusionRule(organization = "vigna.dsi.unimi.it"),
     ExclusionRule(organization = "net.billylieurance.azuresearch"),
