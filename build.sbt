@@ -2,7 +2,6 @@ name := "simplu3D-openmole-plugin"
 
 version := "1.0"
 
-scalaVersion := "2.12.6"
 
 javacOptions ++= Seq("-source", "1.8", "-target", "1.8", "-Xlint")
 scalacOptions += "-target:jvm-1.8"
@@ -54,8 +53,9 @@ resolvers += "Hibernate" at "http://www.hibernatespatial.org/repository"
 
 //libraryDependencies += "org.openmole" %% "org-openmole-plugin-task-scala" % openMOLEVersion
 
-val simplu3DVersion = "1.2-SNAPSHOT"
 
+val simplu3DVersion = "1.3-SNAPSHOT"
+val simplu3D_experimentsVersion = "1.2-SNAPSHOT"
 val geotoolsGridVersion = "18.4"
 
 libraryDependencies += "org.geotools" % "gt-grid" % geotoolsGridVersion
@@ -76,7 +76,7 @@ libraryDependencies += "org.geotools" % "gt-api" % geotoolsGridVersion
 
 
 
-libraryDependencies += "fr.ign.cogit" % "simplu3d-experiments" % simplu3DVersion excludeAll(
+libraryDependencies += "fr.ign.cogit" % "simplu3d-experiments" % simplu3D_experimentsVersion excludeAll(
     ExclusionRule(organization = "org.geotools"),
     ExclusionRule(organization = "uk.ac.ed.ph.snuggletex"),
     ExclusionRule(organization = "vigna.dsi.unimi.it"),
@@ -94,3 +94,6 @@ libraryDependencies += "fr.ign.cogit" % "simplu3d-experiments" % simplu3DVersion
     ExclusionRule(organization = "javax.media"),
     ExclusionRule(organization = "org.slf4j")
   )
+
+
+libraryDependencies += "fr.ign.cogit" % "simplu3d" % simplu3DVersion
